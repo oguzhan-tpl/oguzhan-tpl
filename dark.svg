@@ -1,67 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="100%" height="100%" style="background-color: #050914; font-family: 'Courier New', monospace; user-select: none;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="100%" height="100%" font-family="'Courier New', monospace">
   <defs>
-    <!-- Gelişmiş ve Temiz Parlama Efektleri -->
-    <filter id="neonCyan" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="2" result="blur1" />
-      <feGaussianBlur stdDeviation="6" result="blur2" />
-      <feMerge>
-        <feMergeNode in="blur2" />
-        <feMergeNode in="blur1" />
-        <feMergeNode in="SourceGraphic" />
-      </feMerge>
-    </filter>
-
-    <filter id="neonRed" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="3" result="blur" />
-      <feMerge>
-        <feMergeNode in="blur" />
-        <feMergeNode in="SourceGraphic" />
-      </feMerge>
-    </filter>
-
-    <!-- Nokta Izgara Arka Plan -->
+    <!-- Nokta Izgara Arka Plan (GitHub Güvenli Pattern) -->
     <pattern id="dotGrid" width="20" height="20" patternUnits="userSpaceOnUse">
       <circle cx="2" cy="2" r="1" fill="#00e5ff" opacity="0.1" />
     </pattern>
-
-    <!-- Tarama Çizgisi Maskesi (Veri Yükleme Hissi) -->
-    <clipPath id="wipeRight">
-      <rect x="0" y="0" width="0" height="720">
-        <animate attributeName="width" values="0;1280" begin="4.5s" dur="1.5s" fill="freeze" calcMode="spline" keySplines="0.25 0.1 0.25 1" />
-      </rect>
-    </clipPath>
-    
-    <!-- Merkezi Altıgen Çekirdek Maskesi -->
-    <clipPath id="hexClip">
-      <polygon points="640,240 730,290 730,390 640,440 550,390 550,290" />
-    </clipPath>
   </defs>
 
-  <!-- Arka Plan Zemin -->
+  <!-- Arka Plan Zemin (Style yerine standart nitelik) -->
   <rect width="100%" height="100%" fill="#050914" />
   <rect width="100%" height="100%" fill="url(#dotGrid)" />
 
   <!-- ==========================================
-       AÇILIŞ ANİMASYONU (BOOT SEQUENCE) (0 - 4.5s)
+       AÇILIŞ ANİMASYONU (0 - 4.5s)
        ========================================== -->
   <g>
-    <!-- Açılış bitince bu grup kaybolur -->
     <animate attributeName="opacity" values="1;1;0" keyTimes="0;0.9;1" dur="4.5s" fill="freeze" />
     <animateTransform attributeName="transform" type="scale" values="1;1;1.05" keyTimes="0;0.9;1" dur="4.5s" fill="freeze" transform-origin="640 360" />
 
     <!-- Merkezi Logo / Yükleme İkonu -->
     <path d="M 640,250 L 700,285 L 700,355 L 640,390 L 580,355 L 580,285 Z" fill="none" stroke="#00e5ff" stroke-width="1" opacity="0.3"/>
-    <path d="M 640,250 L 700,285 L 700,355 L 640,390 L 580,355 L 580,285 Z" fill="none" stroke="#00e5ff" stroke-width="3" stroke-dasharray="400" stroke-dashoffset="400" filter="url(#neonCyan)">
+    
+    <!-- Sahte Parlama Katmanı -->
+    <path d="M 640,250 L 700,285 L 700,355 L 640,390 L 580,355 L 580,285 Z" fill="none" stroke="#00e5ff" stroke-width="8" opacity="0.2" stroke-dasharray="400" stroke-dashoffset="400">
+      <animate attributeName="stroke-dashoffset" values="400;0" dur="2s" fill="freeze" calcMode="spline" keySplines="0.4 0 0.2 1" />
+    </path>
+    <!-- Ana Çizgi -->
+    <path d="M 640,250 L 700,285 L 700,355 L 640,390 L 580,355 L 580,285 Z" fill="none" stroke="#00e5ff" stroke-width="2" stroke-dasharray="400" stroke-dashoffset="400">
       <animate attributeName="stroke-dashoffset" values="400;0" dur="2s" fill="freeze" calcMode="spline" keySplines="0.4 0 0.2 1" />
     </path>
     
     <!-- Yükleme Barı -->
     <rect x="440" y="440" width="400" height="4" fill="#0f192e" />
-    <rect x="440" y="440" width="0" height="4" fill="#00e5ff" filter="url(#neonCyan)">
+    <rect x="440" y="440" width="0" height="4" fill="#00e5ff">
       <animate attributeName="width" values="0;100;250;400" keyTimes="0;0.3;0.6;1" dur="3.5s" fill="freeze" />
     </rect>
 
-    <!-- Terminal Yazıları -->
+    <!-- Terminal Yazıları (Özel karakterler XML formatına çevrildi) -->
     <text x="640" y="480" font-size="14" fill="#00e5ff" text-anchor="middle" letter-spacing="2">
       <tspan opacity="0">SİSTEM ÇEKİRDEĞİ BAŞLATILIYOR...<animate attributeName="opacity" values="0;1" begin="0.5s" dur="0.1s" fill="freeze" /></tspan>
     </text>
@@ -72,19 +46,24 @@
       <tspan opacity="0">LOKASYON ONAYLANDI: KAYSERİ, TR<animate attributeName="opacity" values="0;1" begin="2.5s" dur="0.1s" fill="freeze" /></tspan>
     </text>
     <text x="640" y="555" font-size="16" fill="#00ff66" text-anchor="middle" letter-spacing="4" font-weight="bold">
-      <tspan opacity="0">>_ GİRİŞ ONAYLANDI<animate attributeName="opacity" values="0;1" begin="3.5s" dur="0.1s" fill="freeze" /></tspan>
+      <tspan opacity="0">&gt;_ GİRİŞ ONAYLANDI<animate attributeName="opacity" values="0;1" begin="3.5s" dur="0.1s" fill="freeze" /></tspan>
     </text>
   </g>
 
   <!-- ==========================================
        ANA ARAYÜZ (HUD) (4.5s sonrasında görünür)
        ========================================== -->
-  <g opacity="0" clip-path="url(#wipeRight)">
-    <animate attributeName="opacity" values="0;1" begin="4.4s" dur="0.1s" fill="freeze" />
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;1" begin="4.4s" dur="0.5s" fill="freeze" />
 
-    <!-- DIŞ ÇERÇEVE VE HATLARI (Temiz, Cyberpunk Tarzı) -->
+    <!-- DIŞ ÇERÇEVE VE HATLARI -->
     <path d="M 40,40 L 300,40 L 320,60 L 960,60 L 980,40 L 1240,40 L 1240,680 L 980,680 L 960,660 L 320,660 L 300,680 L 40,680 Z" fill="none" stroke="#2979ff" stroke-width="1.5" opacity="0.4" />
-    <path d="M 35,35 L 80,35 M 1245,35 L 1200,35 M 35,685 L 80,685 M 1245,685 L 1200,685" stroke="#00e5ff" stroke-width="3" filter="url(#neonCyan)" />
+    
+    <!-- Köşe Dekorasyonları (Sahte Parlama Teknikli) -->
+    <g>
+      <path d="M 35,35 L 80,35 M 1245,35 L 1200,35 M 35,685 L 80,685 M 1245,685 L 1200,685" stroke="#00e5ff" stroke-width="8" opacity="0.2"/>
+      <path d="M 35,35 L 80,35 M 1245,35 L 1200,35 M 35,685 L 80,685 M 1245,685 L 1200,685" stroke="#00e5ff" stroke-width="2"/>
+    </g>
 
     <!-- ÜST BAŞLIK BİLGİLERİ -->
     <text x="60" y="80" font-size="22" font-weight="bold" fill="#ffffff" letter-spacing="3">
@@ -97,16 +76,14 @@
 
     <!-- ================= SOL PANEL (SİSTEM / DONANIM) ================= -->
     <g transform="translate(60, 130)">
-      <text x="0" y="0" font-size="16" fill="#00e5ff" letter-spacing="2" filter="url(#neonCyan)">[ DONANIM_İSTATİSTİKLERİ ]</text>
+      <text x="0" y="0" font-size="16" fill="#00e5ff" letter-spacing="2">[ DONANIM_İSTATİSTİKLERİ ]</text>
       
-      <!-- CPU Bilgisi ve Grafik -->
       <text x="0" y="40" font-size="12" fill="#a0b4d6">İŞLEMCİ BİRİMİ:</text>
       <text x="0" y="60" font-size="16" font-weight="bold" fill="#ffffff">AMD Athlon 3000G</text>
       
-      <!-- Mantıksal CPU Barları -->
       <g transform="translate(0, 75)">
         <rect width="250" height="6" fill="#0f192e" />
-        <rect width="180" height="6" fill="#00e5ff" filter="url(#neonCyan)">
+        <rect width="180" height="6" fill="#00e5ff">
           <animate attributeName="width" values="120; 190; 140; 210; 180" dur="5s" repeatCount="indefinite" />
         </rect>
         <text x="265" y="7" font-size="12" fill="#00e5ff">CORE_0</text>
@@ -118,22 +95,19 @@
         <text x="265" y="22" font-size="12" fill="#2979ff">CORE_1</text>
       </g>
 
-      <!-- Bellek (RAM) Monitörü -->
       <g transform="translate(0, 150)">
         <text x="0" y="0" font-size="12" fill="#a0b4d6">BELLEK KULLANIMI: 16.00 GB</text>
         <rect x="0" y="15" width="300" height="20" fill="none" stroke="#2979ff" stroke-width="1" opacity="0.5"/>
-        <rect x="2" y="17" width="160" height="16" fill="rgba(0, 229, 255, 0.2)" />
-        <!-- RAM Dilimleri -->
+        <rect x="2" y="17" width="160" height="16" fill="#00e5ff" opacity="0.2" />
         <path d="M 2,17 L 10,17 M 15,17 L 23,17 M 28,17 L 36,17 M 41,17 L 49,17 M 54,17 L 62,17 M 67,17 L 75,17" stroke="#00e5ff" stroke-width="16" stroke-dasharray="8 5">
           <animate attributeName="stroke-dasharray" values="8 5; 8 10; 8 5" dur="3s" repeatCount="indefinite" />
         </path>
         <text x="170" y="29" font-size="14" fill="#ffffff" font-weight="bold">53% <tspan fill="#00e5ff" font-size="10">ALLO</tspan></text>
       </g>
 
-      <!-- İşletim Sistemi Verisi -->
       <g transform="translate(0, 230)">
-        <rect width="300" height="60" fill="rgba(41, 121, 255, 0.05)" stroke="#2979ff" stroke-width="1" />
-        <line x1="0" y1="0" x2="0" y2="60" stroke="#00e5ff" stroke-width="4" filter="url(#neonCyan)"/>
+        <rect width="300" height="60" fill="#2979ff" opacity="0.05" stroke="#2979ff" stroke-width="1" />
+        <line x1="0" y1="0" x2="0" y2="60" stroke="#00e5ff" stroke-width="4"/>
         <text x="15" y="25" font-size="12" fill="#a0b4d6">OS VERSİYONU</text>
         <text x="15" y="45" font-size="16" fill="#ffffff" font-weight="bold">WINDOWS 10 PRO</text>
         <circle cx="270" cy="30" r="4" fill="#00ff66">
@@ -142,9 +116,7 @@
       </g>
     </g>
 
-
-    <!-- ================= MERKEZİ VERİ ÇEKİRDEĞİ (Ağ Topolojisi Mantığı) ================= -->
-    <!-- Eski tasarımdaki karmaşık çemberler yerine, mantıksal veri akışı gösterimi -->
+    <!-- ================= MERKEZİ VERİ ÇEKİRDEĞİ ================= -->
     <g transform="translate(640, 360)">
       
       <!-- Dış Kılavuz Çizgileri -->
@@ -155,24 +127,20 @@
         <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="40s" repeatCount="indefinite" />
       </circle>
 
-      <!-- Veri Akış Çizgileri (Merkezden panellere bağlanan hatlar) -->
+      <!-- Veri Akış Çizgileri (GitHub Animasyon Uyumlu) -->
       <g opacity="0.4">
         <!-- Sola giden hat -->
-        <path d="M -100,0 L -250,0 L -280,-100" fill="none" stroke="#00e5ff" stroke-width="2" />
+        <path d="M -100,0 L -250,0 L -280,-100" fill="none" stroke="#00e5ff" stroke-width="2" stroke-dasharray="10 10">
+          <animate attributeName="stroke-dashoffset" from="20" to="0" dur="1s" repeatCount="indefinite" />
+        </path>
         <!-- Sağa giden hat -->
-        <path d="M 100,0 L 250,0 L 280,100" fill="none" stroke="#00e5ff" stroke-width="2" />
-        
-        <!-- Hat Üzerinde Akan Veri Paketleri -->
-        <circle cx="0" cy="0" r="3" fill="#ffffff" filter="url(#neonCyan)">
-          <animateMotion path="M -100,0 L -250,0 L -280,-100" dur="3s" repeatCount="indefinite" />
-        </circle>
-        <circle cx="0" cy="0" r="3" fill="#ffffff" filter="url(#neonCyan)">
-          <animateMotion path="M 100,0 L 250,0 L 280,100" dur="3s" begin="1s" repeatCount="indefinite" />
-        </circle>
+        <path d="M 100,0 L 250,0 L 280,100" fill="none" stroke="#00e5ff" stroke-width="2" stroke-dasharray="10 10">
+          <animate attributeName="stroke-dashoffset" from="0" to="20" dur="1s" repeatCount="indefinite" />
+        </path>
       </g>
 
       <!-- Merkezi Altıgen YZ Beyni -->
-      <polygon points="0,-80 70,-40 70,40 0,80 -70,40 -70,-40" fill="rgba(0, 229, 255, 0.05)" stroke="#00e5ff" stroke-width="2" filter="url(#neonCyan)" />
+      <polygon points="0,-80 70,-40 70,40 0,80 -70,40 -70,-40" fill="#00e5ff" opacity="0.05" stroke="#00e5ff" stroke-width="2" />
       <polygon points="0,-60 52,-30 52,30 0,60 -52,30 -52,-30" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.5" />
       
       <!-- Çekirdek İçi Dalgalanma -->
@@ -180,36 +148,32 @@
         <animate attributeName="r" values="20;35;20" dur="2s" repeatCount="indefinite" />
         <animate attributeName="opacity" values="0.4;0.1;0.4" dur="2s" repeatCount="indefinite" />
       </circle>
-      <circle cx="0" cy="0" r="10" fill="#ffffff" filter="url(#neonCyan)" />
+      <circle cx="0" cy="0" r="10" fill="#ffffff" />
 
-      <!-- Merkez Etrafı Kayan Hedefleme Verileri -->
+      <!-- Merkez Etrafı Verileri -->
       <g font-size="10" fill="#00e5ff" opacity="0.8">
         <text x="-40" y="-95">SYS.CORE.ACTIVE</text>
         <text x="-30" y="105">AI_BOARD_SYNC</text>
       </g>
     </g>
 
-
     <!-- ================= SAĞ PANEL (MODÜLLER VE YAZILIM) ================= -->
     <g transform="translate(930, 130)">
-      <text x="0" y="0" font-size="16" fill="#00e5ff" letter-spacing="2" filter="url(#neonCyan)">[ AKTİF_DÜĞÜMLER ]</text>
+      <text x="0" y="0" font-size="16" fill="#00e5ff" letter-spacing="2">[ AKTİF_DÜĞÜMLER ]</text>
 
-      <!-- Proje Modülleri Listesi -->
       <g transform="translate(0, 30)">
         
-        <!-- Python Engine -->
         <g transform="translate(0, 0)">
-          <rect width="280" height="40" fill="rgba(0, 229, 255, 0.05)" stroke="#2979ff" stroke-width="1"/>
+          <rect width="280" height="40" fill="#00e5ff" opacity="0.05" stroke="#2979ff" stroke-width="1"/>
           <rect width="4" height="40" fill="#00ff66" />
           <text x="15" y="18" font-size="12" fill="#a0b4d6">MODÜL 01</text>
           <text x="15" y="34" font-size="14" font-weight="bold" fill="#ffffff">PYTHON ENGINE</text>
           <text x="210" y="25" font-size="12" fill="#00ff66">ONLINE</text>
         </g>
 
-        <!-- YZ Yönetim Kurulu -->
         <g transform="translate(0, 50)">
-          <rect width="280" height="40" fill="rgba(0, 229, 255, 0.05)" stroke="#2979ff" stroke-width="1"/>
-          <rect width="4" height="40" fill="#00e5ff" filter="url(#neonCyan)"/>
+          <rect width="280" height="40" fill="#00e5ff" opacity="0.05" stroke="#2979ff" stroke-width="1"/>
+          <rect width="4" height="40" fill="#00e5ff" />
           <text x="15" y="18" font-size="12" fill="#a0b4d6">MODÜL 02</text>
           <text x="15" y="34" font-size="14" font-weight="bold" fill="#ffffff">YZ YÖNETİM KURULU</text>
           <circle cx="260" cy="20" r="4" fill="#00e5ff">
@@ -217,23 +181,20 @@
           </circle>
         </g>
 
-        <!-- OSINT Monitor -->
         <g transform="translate(0, 100)">
-          <rect width="280" height="40" fill="rgba(0, 229, 255, 0.05)" stroke="#2979ff" stroke-width="1"/>
+          <rect width="280" height="40" fill="#00e5ff" opacity="0.05" stroke="#2979ff" stroke-width="1"/>
           <rect width="4" height="40" fill="#00ff66" />
           <text x="15" y="18" font-size="12" fill="#a0b4d6">MODÜL 03</text>
           <text x="15" y="34" font-size="14" font-weight="bold" fill="#ffffff">OSINT DASHBOARD</text>
           <text x="210" y="25" font-size="12" fill="#00ff66">AKTİF</text>
         </g>
 
-        <!-- Github Hata Durumu (Mantıksal Uyarı Görselleştirme) -->
         <g transform="translate(0, 150)">
-          <rect width="280" height="40" fill="rgba(255, 23, 68, 0.1)" stroke="#ff1744" stroke-width="1"/>
-          <rect width="4" height="40" fill="#ff1744" filter="url(#neonRed)"/>
+          <rect width="280" height="40" fill="#ff1744" opacity="0.1" stroke="#ff1744" stroke-width="1"/>
+          <rect width="4" height="40" fill="#ff1744" />
           <text x="15" y="18" font-size="12" fill="#ff1744">MODÜL 04 - GIT REPO</text>
           <text x="15" y="34" font-size="14" font-weight="bold" fill="#ffffff">oguzhan-tpl</text>
           <text x="200" y="25" font-size="12" fill="#ff1744" font-weight="bold">ERR_403</text>
-          <!-- Yanıp sönen uyarı çerçevesi -->
           <rect width="280" height="40" fill="none" stroke="#ff1744" stroke-width="2" opacity="0">
             <animate attributeName="opacity" values="0;1;0" dur="1s" repeatCount="indefinite"/>
           </rect>
@@ -241,12 +202,12 @@
 
       </g>
 
-      <!-- Global İletişim Ağı (Temiz, Büyük Tipografi) -->
+      <!-- Global İletişim Ağı -->
       <g transform="translate(0, 360)">
         <line x1="0" y1="0" x2="280" y2="0" stroke="#2979ff" stroke-width="1" stroke-dasharray="2 4" />
         <text x="0" y="25" font-size="12" fill="#a0b4d6">KÜRESEL İLETİŞİM PROTOKOLÜ</text>
-        <text x="0" y="55" font-size="28" font-weight="bold" fill="#ffffff" letter-spacing="2" filter="url(#neonCyan)">wp_oguz.46</text>
-        <!-- İletişim Ses Dalgaları -->
+        <text x="0" y="55" font-size="28" font-weight="bold" fill="#ffffff" letter-spacing="2">wp_oguz.46</text>
+        
         <g transform="translate(0, 70)" fill="#00e5ff">
           <rect x="0" y="0" width="4" height="10">
             <animate attributeName="height" values="10;25;10;5" dur="0.8s" repeatCount="indefinite" />
@@ -268,20 +229,24 @@
       </g>
     </g>
 
-
     <!-- ================= ALT BAR (TERMİNAL & LOG) ================= -->
     <g transform="translate(60, 610)">
-      <path d="M 0,0 L 20,20 L 1140,20 L 1160,0 Z" fill="rgba(41, 121, 255, 0.1)" stroke="#2979ff" stroke-width="1" />
-      <text x="30" y="14" font-size="12" fill="#00e5ff">C:\Users\OĞUZHAN> tail -f system.log</text>
+      <path d="M 0,0 L 20,20 L 1140,20 L 1160,0 Z" fill="#2979ff" opacity="0.1" stroke="#2979ff" stroke-width="1" />
+      <text x="30" y="14" font-size="12" fill="#00e5ff">C:\Users\OĞUZHAN&gt; tail -f system.log</text>
       
-      <!-- Değişen Log Metinleri -->
-      <g font-size="12" fill="#a0b4d6" font-family="'Courier New', monospace">
-        <text x="300" y="14">
-          <tspan display="none">> YZ Ajanları ağ trafiğini filtreleniyor...<set attributeName="display" to="inline" begin="5s" dur="4s"/><set attributeName="display" to="none" begin="9s"/></tspan>
-          <tspan display="none">> Blok bulmaca motoru kaynakları optimize ediliyor...<set attributeName="display" to="inline" begin="9s" dur="4s"/><set attributeName="display" to="none" begin="13s"/></tspan>
-          <tspan display="none">> wp_oguz.46 üzerinden güvenli tünel açık. Bekleniyor...<set attributeName="display" to="inline" begin="13s" dur="4s"/><set attributeName="display" to="none" begin="17s"/></tspan>
-          <!-- Animasyon döngüsü -->
-          <animate attributeName="opacity" values="1" dur="12s" repeatCount="indefinite" />
+      <!-- Değişen Log Metinleri (GitHub Güvenli Opaklık Animasyonu) -->
+      <g font-size="12" fill="#a0b4d6">
+        <text x="300" y="14" opacity="0">
+          &gt; YZ Ajanları ağ trafiğini filtreleniyor...
+          <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.05;0.3;0.35;1" dur="12s" begin="0s" repeatCount="indefinite" />
+        </text>
+        <text x="300" y="14" opacity="0">
+          &gt; Blok bulmaca motoru kaynakları optimize ediliyor...
+          <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.3;0.35;0.6;0.65;1" dur="12s" begin="0s" repeatCount="indefinite" />
+        </text>
+        <text x="300" y="14" opacity="0">
+          &gt; wp_oguz.46 üzerinden güvenli tünel açık. Bekleniyor...
+          <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.6;0.65;0.9;0.95;1" dur="12s" begin="0s" repeatCount="indefinite" />
         </text>
       </g>
     </g>
