@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 460" width="850" height="460">
+  <defs>
+    <pattern id="dotMatrix" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#1f293d" opacity="0.4" />
+    </pattern>
+    
+    <filter id="neonGlowBlue" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter id="neonGlowGreen" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <linearGradient id="cyberGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#070a12" />
+      <stop offset="50%" stop-color="#0c1220" />
+      <stop offset="100%" stop-color="#05070b" />
+    </linearGradient>
+    <linearGradient id="barGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00f0ff" />
+      <stop offset="100%" stop-color="#7000ff" />
+    </linearGradient>
+  </defs>
+
+  <rect width="850" height="460" fill="url(#cyberGrad)" rx="16" stroke="#2e3c54" stroke-width="2"/>
+  <rect width="850" height="460" fill="url(#dotMatrix)" rx="16"/>
+  
+  <path d="M 0,16 A 16,16 0 0,1 16,0 L 834,0 A 16,16 0 0,1 850,16 L 850,45 L 0,45 Z" fill="#0d1527" stroke="#2e3c54" stroke-width="1"/>
+  <circle cx="25" cy="22" r="6" fill="#ff5f56" />
+  <circle cx="45" cy="22" r="6" fill="#ffbd2e" />
+  <circle cx="65" cy="22" r="6" fill="#27c93f" />
+  <text x="425" y="27" font-family="monospace" font-size="12" fill="#6b7c96" text-anchor="middle" font-weight="bold" letter-spacing="2">CORE_OS // OGUZ46 // MAIN_INTERFACE</text>
+
+  <g transform="translate(40, 75)">
+    <path d="M 0,30 L 0,0 L 30,0 M 250,0 L 280,0 L 280,30 M 280,290 L 280,320 L 250,320 M 0,320 L 0,290 L 30,290" stroke="#00f0ff" stroke-width="2" fill="none" filter="url(#neonGlowBlue)" />
+    
+    <circle cx="140" cy="140" r="125" fill="none" stroke="#1f293d" stroke-width="1" stroke-dasharray="5 10" />
+    <circle cx="140" cy="140" r="115" fill="none" stroke="#00f0ff" stroke-width="1.5" stroke-dasharray="40 180" opacity="0.6">
+      <animateTransform attributeName="transform" type="rotate" from="0 140 140" to="360 140 140" dur="8s" repeatCount="indefinite"/>
+    </circle>
+
+    <g transform="translate(15, 20)" filter="url(#neonGlowBlue)">
+      <path d="M55,50 C65,15 130,10 175,26 C195,32 200,45 198,62 L180,60 C180,48 165,42 145,38 C105,32 75,38 60,60 Z" fill="#00f0ff" opacity="0.9"/>
+      <path d="M70,40 C90,25 130,22 165,32" fill="none" stroke="#00f0ff" stroke-width="1" stroke-dasharray="2 4"/>
+      <path d="M56,65 C50,90 52,120 56,130 C62,175 100,205 130,205 C160,205 192,175 198,130 C202,120 204,90 198,65" fill="none" stroke="#00f0ff" stroke-width="2.5"/>
+      <path d="M48,85 L122,93 L198,85 L192,108 C186,125 165,130 154,130 C138,130 128,118 122,106 L122,106 C116,118 106,130 90,130 C79,130 55,125 50,108 Z" fill="#070a12" stroke="#00f0ff" stroke-width="3"/>
+      <path d="M56,93 L114,98 L112,115 C107,122 96,124 88,122 C74,118 62,108 56,93 Z" fill="#00ff66" opacity="0.25" filter="url(#neonGlowGreen)"/>
+      <path d="M186,93 L128,98 L130,115 C135,122 146,124 154,122 C168,118 180,108 186,93 Z" fill="#00ff66" opacity="0.25" filter="url(#neonGlowGreen)"/>
+      <line x1="65" y1="95" x2="85" y2="115" stroke="#fff" stroke-width="1.5" opacity="0.6" />
+      <line x1="140" y1="95" x2="160" y2="115" stroke="#fff" stroke-width="1.5" opacity="0.6" />
+      <path d="M108,162 Q128,167 148,162" fill="none" stroke="#00f0ff" stroke-width="2"/>
+    </g>
+
+    <rect x="10" y="10" width="260" height="4" fill="#00ff66" opacity="0.5" filter="url(#neonGlowGreen)">
+      <animate attributeName="y" values="10;305;10" dur="4s" repeatCount="indefinite" />
+    </rect>
+
+    <text x="140" y="315" font-family="monospace" font-size="11" fill="#00ff66" font-weight="bold" text-anchor="middle" filter="url(#neonGlowGreen)" letter-spacing="1">🔥 SYSTEM_BIO: ACTIVE</text>
+  </g>
+
+  <g transform="translate(360, 75)">
+    <text x="0" y="20" font-family="monospace" font-size="15" fill="#00ff66" font-weight="bold" filter="url(#neonGlowGreen)">&gt;&gt; <tspan fill="#ffffff">python3 --deploy --identity_matrix</tspan></text>
+    
+    <g transform="translate(0, 40)">
+      <rect width="450" height="225" fill="#090e1a" rx="10" stroke="#23334d" stroke-width="1.5" />
+      
+      <path d="M 430,0 L 450,20 L 450,50" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <circle cx="435" cy="15" r="3" fill="#00f0ff" />
+
+      <text x="30" y="45" font-family="monospace" font-size="14" fill="#6b7c96" font-weight="bold">ACCESS_ID:</text>
+      <text x="150" y="45" font-family="monospace" font-size="16" fill="#ffffff" font-weight="bold" letter-spacing="1">oguz.46</text>
+      <line x1="30" y1="60" x2="420" y2="60" stroke="#1f293d" stroke-width="1" />
+
+      <text x="30" y="95" font-family="monospace" font-size="14" fill="#6b7c96" font-weight="bold">CORE_ENG:</text>
+      <text x="150" y="95" font-family="monospace" font-size="16" fill="#00f0ff" font-weight="bold">Python System</text>
+      
+      <g transform="translate(150, 110)">
+        <rect width="270" height="8" fill="#141b2d" rx="4" />
+        <rect width="250" height="8" fill="url(#barGrad)" rx="4" filter="url(#neonGlowBlue)">
+          <animate attributeName="width" values="0;250;230;250" dur="2s" fill="freeze" />
+        </rect>
+      </g>
+      <line x1="30" y1="140" x2="420" y2="140" stroke="#1f293d" stroke-width="1" />
+
+      <text x="30" y="180" font-family="monospace" font-size="14" fill="#6b7c96" font-weight="bold">COMM_LINK:</text>
+      <text x="150" y="180" font-family="monospace" font-size="16" fill="#ff007f" font-weight="bold" filter="url(#neonGlowBlue)">instagram // wp_oguz.46</text>
+      
+      <g transform="translate(30, 195)" fill="none" stroke-width="2">
+        <path d="M 0,10 Q 20,-5 40,10 T 80,10 T 120,10 T 160,10 T 200,10 T 240,10 T 280,10 T 320,10 T 360,10 T 400,10" stroke="#00f0ff" opacity="0.7">
+          <animate attributeName="d" values="M 0,10 Q 20,-5 40,10 T 80,10 T 120,10 T 160,10 T 200,10 T 240,10 T 280,10 T 320,10 T 360,10 T 400,10;M 0,10 Q 20,25 40,10 T 80,10 T 120,10 T 160,10 T 200,10 T 240,10 T 280,10 T 320,10 T 360,10 T 400,10;M 0,10 Q 20,-5 40,10 T 80,10 T 120,10 T 160,10 T 200,10 T 240,10 T 280,10 T 320,10 T 360,10 T 400,10" dur="3s" repeatCount="indefinite" />
+        </path>
+      </g>
+    </g>
+    
+    <g transform="translate(0, 295)">
+      <text x="0" y="20" font-family="monospace" font-size="14" fill="#00f0ff" font-weight="bold" filter="url(#neonGlowBlue)">&gt; SECURE_CONNECTION: ESTABLISHED_</text>
+      <rect x="290" y="6" width="10" height="16" fill="#00ff66" filter="url(#neonGlowGreen)">
+        <animate attributeName="opacity" values="0;1;0" dur="1s" repeatCount="indefinite" />
+      </rect>
+    </g>
+  </g>
+</svg>
