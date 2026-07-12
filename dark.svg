@@ -1,230 +1,233 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="100%" height="100%" font-family="'Courier New', monospace">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="100%" height="100%" font-family="'Courier New', monospace" style="background-color: #03060c;">
+  
   <style>
-    /* GITHUB CAMO PROXY BYPASS - CSS ANIMASYON MOTORU */
-    .boot-screen { animation: fadeOut 0.5s 4.5s forwards; }
-    .main-hud { opacity: 0; animation: fadeIn 0.5s 4.5s forwards; }
+    /* 1. GİRİŞ YAZILARI ANİMASYONLARI (Tam Merkezde, Çakışmayan Akış) */
+    .seq-1 { animation: hideIntro 0.1s 2.8s forwards; }
+    .seq-2 { opacity: 0; animation: showHideIntro 2.8s 2.8s forwards; }
     
-    @keyframes fadeOut { 
-      99% { opacity: 0; visibility: visible; } 
-      100% { opacity: 0; visibility: hidden; display: none; } 
+    @keyframes hideIntro {
+      to { opacity: 0; visibility: hidden; }
     }
+    
+    @keyframes showHideIntro {
+      0%, 95% { opacity: 1; visibility: visible; }
+      100% { opacity: 0; visibility: hidden; }
+    }
+
+    /* Daktilo Maskesi Kaydırma Efekti */
+    .slide-1 { animation: slideMask 1.5s 0.5s steps(20) forwards; }
+    .slide-2 { animation: slideMask 1.5s 3.3s steps(20) forwards; }
+    
+    @keyframes slideMask {
+      to { transform: translateX(750px); }
+    }
+
+    /* 2. ANA SİSTEMİN AÇILMASI (5.6 saniyeden sonra) */
+    .main-system { opacity: 0; animation: systemOn 1s 5.6s forwards; }
+    @keyframes systemOn { 100% { opacity: 1; } }
+
+    /* Çekirdek Pop-up Animasyonu */
+    .core-pop { transform: scale(0); transform-origin: 640px 360px; animation: popUp 1s 5.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    @keyframes popUp { 100% { transform: scale(1); } }
+
+    /* Lazer Veri Yollarının Çizilmesi */
+    .draw-line { stroke-dasharray: 500; stroke-dashoffset: 500; animation: draw 1s 6.2s forwards; }
+    @keyframes draw { 100% { stroke-dashoffset: 0; } }
+
+    /* Yan Panellerin Belirmesi */
+    .panel { opacity: 0; animation: fadeIn 1s 6.8s forwards; }
     @keyframes fadeIn { 100% { opacity: 1; } }
 
-    /* Boot Animasyonları */
-    .progress { animation: load 4s ease-out forwards; }
-    @keyframes load { 0% { width: 0; } 20% { width: 50px; } 50% { width: 200px; } 80% { width: 350px; } 100% { width: 400px; } }
-    .type-1 { opacity: 0; animation: show 0.1s 0.5s forwards; }
-    .type-2 { opacity: 0; animation: show 0.1s 1.5s forwards; }
-    .type-3 { opacity: 0; animation: show 0.1s 2.5s forwards; }
-    .type-4 { opacity: 0; animation: show 0.1s 3.5s forwards; }
-    @keyframes show { 100% { opacity: 1; } }
-
-    /* HUD Animasyonları */
-    .cpu-0 { animation: c0 4s infinite; }
-    .cpu-1 { animation: c1 5s infinite; }
-    @keyframes c0 { 0%,100%{width:180px;} 30%{width:120px;} 70%{width:220px;} }
-    @keyframes c1 { 0%,100%{width:140px;} 40%{width:190px;} 80%{width:90px;} }
-
-    .ram-flow { stroke-dasharray: 8 5; animation: ramAnim 3s linear infinite; }
-    @keyframes ramAnim { to { stroke-dashoffset: -26px; } }
-
-    .blink { animation: b 2s infinite; }
-    .err-blink { animation: e 1s infinite; }
-    @keyframes b { 50% { opacity: 0.2; } }
-    @keyframes e { 50% { opacity: 1; } 100% { opacity: 0; } }
-
-    .spin-slow { animation: spin 60s linear infinite; transform-origin: 0 0; }
-    .spin-rev { animation: spinRev 40s linear infinite; transform-origin: 0 0; }
+    /* 3. DÖNGÜSEL (SÜREKLİ) ANİMASYONLAR */
+    .spin-cw { animation: spin 20s linear infinite; transform-origin: 640px 360px; }
+    .spin-ccw { animation: spinRev 15s linear infinite; transform-origin: 640px 360px; }
     @keyframes spin { 100% { transform: rotate(360deg); } }
     @keyframes spinRev { 100% { transform: rotate(-360deg); } }
 
-    .dash-flow { stroke-dasharray: 10 10; animation: dashAnim 1s linear infinite; }
-    .dash-flow-rev { stroke-dasharray: 10 10; animation: dashAnimRev 1s linear infinite; }
-    @keyframes dashAnim { to { stroke-dashoffset: -20px; } }
-    @keyframes dashAnimRev { to { stroke-dashoffset: 20px; } }
+    .pulse { animation: beat 2s infinite alternate; transform-origin: 640px 360px; }
+    @keyframes beat { 0% { transform: scale(0.95); opacity: 0.8; } 100% { transform: scale(1.05); opacity: 0.3; } }
 
-    .pulse { animation: p 2s ease-in-out infinite; }
-    @keyframes p { 0%,100%{ r:20px; opacity:0.4; } 50%{ r:35px; opacity:0.1; } }
+    .blink { animation: flash 1s infinite; }
+    @keyframes flash { 50% { opacity: 0; } }
 
-    .w1 { animation: w1a 0.8s infinite; }
-    .w2 { animation: w2a 1s infinite; }
-    .w3 { animation: w3a 1.2s infinite; }
-    .w4 { animation: w4a 0.9s infinite; }
-    @keyframes w1a { 50% { height: 25px; y: -15px; } }
-    @keyframes w2a { 50% { height: 5px; y: 5px; } }
-    @keyframes w3a { 50% { height: 30px; y: -20px; } }
-    @keyframes w4a { 50% { height: 10px; y: 0px; } }
-
-    .log-1 { opacity: 0; animation: l1 12s infinite; }
-    .log-2 { opacity: 0; animation: l2 12s infinite; }
-    .log-3 { opacity: 0; animation: l3 12s infinite; }
-    @keyframes l1 { 0%, 30% {opacity:1} 35%, 100% {opacity:0} }
-    @keyframes l2 { 0%, 30% {opacity:0} 35%, 60% {opacity:1} 65%, 100% {opacity:0} }
-    @keyframes l3 { 0%, 60% {opacity:0} 65%, 95% {opacity:1} 100% {opacity:0} }
+    .bar-move { animation: loadBar 3s infinite alternate; }
+    @keyframes loadBar { 0% { width: 40px; } 100% { width: 220px; } }
   </style>
 
   <defs>
-    <pattern id="dotGrid" width="20" height="20" patternUnits="userSpaceOnUse">
-      <circle cx="2" cy="2" r="1" fill="#00e5ff" opacity="0.1" />
+    <!-- Ferah ve temiz nokta ızgarası -->
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#00e5ff" stroke-width="0.5" opacity="0.05" />
     </pattern>
   </defs>
 
-  <!-- Arka Plan Zemin -->
-  <rect width="100%" height="100%" fill="#050914" />
-  <rect width="100%" height="100%" fill="url(#dotGrid)" />
+  <!-- ARKA PLAN -->
+  <rect width="100%" height="100%" fill="#03060c" />
+  <rect width="100%" height="100%" fill="url(#grid)" />
 
-  <!-- ==========================================
-       AÇILIŞ ANİMASYONU (0 - 4.5s)
-       ========================================== -->
-  <g class="boot-screen">
-    <path d="M 640,250 L 700,285 L 700,355 L 640,390 L 580,355 L 580,285 Z" fill="none" stroke="#00e5ff" stroke-width="1" opacity="0.3"/>
-    <path d="M 640,250 L 700,285 L 700,355 L 640,390 L 580,355 L 580,285 Z" fill="none" stroke="#00e5ff" stroke-width="8" opacity="0.2"/>
-    <path d="M 640,250 L 700,285 L 700,355 L 640,390 L 580,355 L 580,285 Z" fill="none" stroke="#00e5ff" stroke-width="2"/>
-    
-    <rect x="440" y="440" width="400" height="4" fill="#0f192e" />
-    <rect x="440" y="440" height="4" fill="#00e5ff" class="progress" />
-
-    <text x="640" y="480" font-size="14" fill="#00e5ff" text-anchor="middle" letter-spacing="2" class="type-1">SİSTEM ÇEKİRDEĞİ BAŞLATILIYOR...</text>
-    <text x="640" y="505" font-size="14" fill="#00e5ff" text-anchor="middle" letter-spacing="2" class="type-2">KULLANICI DOĞRULANIYOR: MR. OĞUZHAN</text>
-    <text x="640" y="530" font-size="14" fill="#00e5ff" text-anchor="middle" letter-spacing="2" class="type-3">LOKASYON ONAYLANDI: KAYSERİ, TR</text>
-    <text x="640" y="555" font-size="16" fill="#00ff66" text-anchor="middle" letter-spacing="4" font-weight="bold" class="type-4">&gt;_ GİRİŞ ONAYLANDI</text>
+  <!-- =====================================================================
+       AŞAMA 1: GİRİŞ SEKANSI (YAZILAR) 
+       Milimetrik olarak merkeze sabitlendi, CSS transform çakışması giderildi.
+       ===================================================================== -->
+  
+  <g class="seq-1" transform="translate(640, 360)">
+    <text x="0" y="15" font-size="45" font-weight="bold" fill="#00e5ff" text-anchor="middle" letter-spacing="8">OĞUZHAN TOPAL</text>
+    <!-- Yazıyı örten ve sağa çekilen maske kutusu (Daktilo Efekti) -->
+    <g class="slide-1">
+      <rect x="-350" y="-30" width="750" height="60" fill="#03060c" />
+      <rect x="-350" y="-20" width="15" height="40" fill="#00e5ff" class="blink" />
+    </g>
   </g>
 
-  <!-- ==========================================
-       ANA ARAYÜZ (HUD) (4.5s sonrasında görünür)
-       ========================================== -->
-  <g class="main-hud">
-    <!-- Dış Çerçeve -->
-    <path d="M 40,40 L 300,40 L 320,60 L 960,60 L 980,40 L 1240,40 L 1240,680 L 980,680 L 960,660 L 320,660 L 300,680 L 40,680 Z" fill="none" stroke="#2979ff" stroke-width="1.5" opacity="0.4" />
-    <g>
-      <path d="M 35,35 L 80,35 M 1245,35 L 1200,35 M 35,685 L 80,685 M 1245,685 L 1200,685" stroke="#00e5ff" stroke-width="8" opacity="0.2"/>
-      <path d="M 35,35 L 80,35 M 1245,35 L 1200,35 M 35,685 L 80,685 M 1245,685 L 1200,685" stroke="#00e5ff" stroke-width="2"/>
+  <g class="seq-2" transform="translate(640, 360)">
+    <text x="0" y="15" font-size="45" font-weight="bold" fill="#00ff66" text-anchor="middle" letter-spacing="8">PYTHON_CORE // INITED</text>
+    <g class="slide-2">
+      <rect x="-400" y="-30" width="800" height="60" fill="#03060c" />
+      <rect x="-400" y="-20" width="15" height="40" fill="#00ff66" class="blink" />
+    </g>
+  </g>
+
+  <!-- =====================================================================
+       AŞAMA 2: ANA ARAYÜZ (5.6 SANİYEDEN SONRA BELİRİR)
+       ===================================================================== -->
+  
+  <g class="main-system">
+
+    <!-- 1. MERKEZİ ÇEKİRDEK (X: 640, Y: 360) -->
+    <g class="core-pop">
+      <!-- Arka Plan Parlaması -->
+      <circle cx="640" cy="360" r="140" fill="#00e5ff" opacity="0.05" />
+      
+      <!-- Sabit Dış Çerçeve -->
+      <circle cx="640" cy="360" r="120" fill="none" stroke="#0044aa" stroke-width="2" />
+      <path d="M 640,230 L 640,240 M 640,480 L 640,490 M 510,360 L 520,360 M 760,360 L 770,360" stroke="#00e5ff" stroke-width="2" />
+
+      <!-- Dönen Halkalar -->
+      <circle cx="640" cy="360" r="105" fill="none" stroke="#00e5ff" stroke-width="2" stroke-dasharray="60 20 10 20" class="spin-cw" />
+      <circle cx="640" cy="360" r="90" fill="none" stroke="#00ff66" stroke-width="1" stroke-dasharray="10 40" class="spin-ccw" />
+      
+      <!-- Titreşen Merkez (Kalp) -->
+      <polygon points="640,310 683,335 683,385 640,410 597,385 597,335" fill="none" stroke="#00e5ff" stroke-width="4" opacity="0.2" class="pulse" />
+      <polygon points="640,320 674,340 674,380 640,400 606,380 606,340" fill="#00e5ff" opacity="0.1" />
+      <polygon points="640,335 661,347 661,373 640,385 619,373 619,347" fill="none" stroke="#ffffff" stroke-width="1" />
+      <circle cx="640" cy="360" r="4" fill="#ffffff" />
+      
+      <text x="640" y="440" font-size="10" fill="#00e5ff" text-anchor="middle" letter-spacing="2">SYS_ONLINE</text>
     </g>
 
-    <!-- Üst Başlık -->
-    <text x="60" y="80" font-size="22" font-weight="bold" fill="#ffffff" letter-spacing="3">OĞUZHAN_OS <tspan fill="#00e5ff" font-size="14" letter-spacing="1">/// v2.6.4</tspan></text>
-    <text x="1220" y="80" font-size="14" fill="#00e5ff" text-anchor="end" letter-spacing="2">BÖLGE: KAYSERİ, TR | BAĞLANTI: <tspan fill="#00ff66">GÜVENLİ</tspan></text>
-    <line x1="60" y1="95" x2="1220" y2="95" stroke="#2979ff" stroke-width="1" opacity="0.3" />
-
-    <!-- Sol Panel -->
-    <g transform="translate(60, 130)">
-      <text x="0" y="0" font-size="16" fill="#00e5ff" letter-spacing="2">[ DONANIM_İSTATİSTİKLERİ ]</text>
-      
-      <text x="0" y="40" font-size="12" fill="#a0b4d6">İŞLEMCİ BİRİMİ:</text>
-      <text x="0" y="60" font-size="16" font-weight="bold" fill="#ffffff">AMD Athlon 3000G</text>
-      
-      <g transform="translate(0, 75)">
-        <rect width="250" height="6" fill="#0f192e" />
-        <rect height="6" fill="#00e5ff" class="cpu-0" />
-        <text x="265" y="7" font-size="12" fill="#00e5ff">CORE_0</text>
-
-        <rect y="15" width="250" height="6" fill="#0f192e" />
-        <rect y="15" height="6" fill="#2979ff" class="cpu-1" />
-        <text x="265" y="22" font-size="12" fill="#2979ff">CORE_1</text>
-      </g>
-
-      <g transform="translate(0, 150)">
-        <text x="0" y="0" font-size="12" fill="#a0b4d6">BELLEK KULLANIMI: 16.00 GB</text>
-        <rect x="0" y="15" width="300" height="20" fill="none" stroke="#2979ff" stroke-width="1" opacity="0.5"/>
-        <rect x="2" y="17" width="160" height="16" fill="#00e5ff" opacity="0.2" />
-        <path d="M 2,17 L 10,17 M 15,17 L 23,17 M 28,17 L 36,17 M 41,17 L 49,17 M 54,17 L 62,17 M 67,17 L 75,17" stroke="#00e5ff" stroke-width="16" class="ram-flow" />
-        <text x="170" y="29" font-size="14" fill="#ffffff" font-weight="bold">53% <tspan fill="#00e5ff" font-size="10">ALLO</tspan></text>
-      </g>
-
-      <g transform="translate(0, 230)">
-        <rect width="300" height="60" fill="#2979ff" opacity="0.05" stroke="#2979ff" stroke-width="1" />
-        <line x1="0" y1="0" x2="0" y2="60" stroke="#00e5ff" stroke-width="4"/>
-        <text x="15" y="25" font-size="12" fill="#a0b4d6">OS VERSİYONU</text>
-        <text x="15" y="45" font-size="16" fill="#ffffff" font-weight="bold">WINDOWS 10 PRO</text>
-        <circle cx="270" cy="30" r="4" fill="#00ff66" class="blink"/>
-      </g>
+    <!-- 2. BAĞLANTI YOLLARI (Çekirdekten panellere giden köprüler) -->
+    <g fill="none" stroke="#0055ff" stroke-width="2">
+      <path d="M 520,360 L 350,360" class="draw-line" />
+      <path d="M 760,360 L 930,360" class="draw-line" />
     </g>
 
-    <!-- Merkezi Ağ -->
-    <g transform="translate(640, 360)">
-      <circle cx="0" cy="0" r="220" fill="none" stroke="#2979ff" stroke-width="1" stroke-dasharray="4 8" opacity="0.3" class="spin-slow"/>
-      <circle cx="0" cy="0" r="160" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-dasharray="60 40" opacity="0.5" class="spin-rev"/>
+    <!-- 3. SOL PANEL: DONANIM (X: 50 - 350) -->
+    <g class="panel" transform="translate(50, 150)">
+      <!-- Panel Çerçevesi -->
+      <path d="M 0,0 L 20,-20 L 300,-20 L 300,400 L 0,400 Z" fill="#0033aa" opacity="0.05" stroke="#00e5ff" stroke-width="1" />
+      <text x="20" y="15" font-size="14" font-weight="bold" fill="#00e5ff" letter-spacing="1">DONANIM_MİMARİSİ</text>
+      <line x1="20" y1="25" x2="280" y2="25" stroke="#0055ff" stroke-width="1" />
 
-      <g opacity="0.4">
-        <path d="M -100,0 L -250,0 L -280,-100" fill="none" stroke="#00e5ff" stroke-width="2" class="dash-flow" />
-        <path d="M 100,0 L 250,0 L 280,100" fill="none" stroke="#00e5ff" stroke-width="2" class="dash-flow-rev" />
-      </g>
-
-      <polygon points="0,-80 70,-40 70,40 0,80 -70,40 -70,-40" fill="#00e5ff" opacity="0.05" stroke="#00e5ff" stroke-width="2" />
-      <polygon points="0,-60 52,-30 52,30 0,60 -52,30 -52,-30" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.5" />
-      
-      <circle cx="0" cy="0" r="25" fill="#00e5ff" class="pulse" />
-      <circle cx="0" cy="0" r="10" fill="#ffffff" />
-
-      <g font-size="10" fill="#00e5ff" opacity="0.8">
-        <text x="-40" y="-95">SYS.CORE.ACTIVE</text>
-        <text x="-30" y="105">AI_BOARD_SYNC</text>
-      </g>
-    </g>
-
-    <!-- Sağ Panel -->
-    <g transform="translate(930, 130)">
-      <text x="0" y="0" font-size="16" fill="#00e5ff" letter-spacing="2">[ AKTİF_DÜĞÜMLER ]</text>
-
-      <g transform="translate(0, 30)">
-        <g transform="translate(0, 0)">
-          <rect width="280" height="40" fill="#00e5ff" opacity="0.05" stroke="#2979ff" stroke-width="1"/>
-          <rect width="4" height="40" fill="#00ff66" />
-          <text x="15" y="18" font-size="12" fill="#a0b4d6">MODÜL 01</text>
-          <text x="15" y="34" font-size="14" font-weight="bold" fill="#ffffff">PYTHON ENGINE</text>
-          <text x="210" y="25" font-size="12" fill="#00ff66">ONLINE</text>
-        </g>
-
-        <g transform="translate(0, 50)">
-          <rect width="280" height="40" fill="#00e5ff" opacity="0.05" stroke="#2979ff" stroke-width="1"/>
-          <rect width="4" height="40" fill="#00e5ff" />
-          <text x="15" y="18" font-size="12" fill="#a0b4d6">MODÜL 02</text>
-          <text x="15" y="34" font-size="14" font-weight="bold" fill="#ffffff">YZ YÖNETİM KURULU</text>
-          <circle cx="260" cy="20" r="4" fill="#00e5ff" class="blink"/>
-        </g>
-
-        <g transform="translate(0, 100)">
-          <rect width="280" height="40" fill="#00e5ff" opacity="0.05" stroke="#2979ff" stroke-width="1"/>
-          <rect width="4" height="40" fill="#00ff66" />
-          <text x="15" y="18" font-size="12" fill="#a0b4d6">MODÜL 03</text>
-          <text x="15" y="34" font-size="14" font-weight="bold" fill="#ffffff">OSINT DASHBOARD</text>
-          <text x="210" y="25" font-size="12" fill="#00ff66">AKTİF</text>
-        </g>
-
-        <g transform="translate(0, 150)">
-          <rect width="280" height="40" fill="#ff1744" opacity="0.1" stroke="#ff1744" stroke-width="1"/>
-          <rect width="4" height="40" fill="#ff1744" />
-          <text x="15" y="18" font-size="12" fill="#ff1744">MODÜL 04 - GIT REPO</text>
-          <text x="15" y="34" font-size="14" font-weight="bold" fill="#ffffff">oguzhan-tpl</text>
-          <text x="200" y="25" font-size="12" fill="#ff1744" font-weight="bold">ERR_403</text>
-          <rect width="280" height="40" fill="none" stroke="#ff1744" stroke-width="2" opacity="0" class="err-blink"/>
-        </g>
-      </g>
-
-      <g transform="translate(0, 360)">
-        <line x1="0" y1="0" x2="280" y2="0" stroke="#2979ff" stroke-width="1" stroke-dasharray="2 4" />
-        <text x="0" y="25" font-size="12" fill="#a0b4d6">KÜRESEL İLETİŞİM PROTOKOLÜ</text>
-        <text x="0" y="55" font-size="28" font-weight="bold" fill="#ffffff" letter-spacing="2">wp_oguz.46</text>
+      <!-- İşlemci (CPU) -->
+      <g transform="translate(20, 50)">
+        <rect x="0" y="0" width="3" height="35" fill="#00e5ff" />
+        <text x="12" y="12" font-size="10" fill="#a0b4d6">İŞLEMCİ (CPU)</text>
+        <text x="12" y="30" font-size="16" font-weight="bold" fill="#ffffff">AMD Athlon 3000G</text>
         
-        <g transform="translate(0, 70)" fill="#00e5ff">
-          <rect x="0" y="0" width="4" height="10" class="w1"/>
-          <rect x="8" y="0" width="4" height="15" class="w2"/>
-          <rect x="16" y="0" width="4" height="8" class="w3"/>
-          <rect x="24" y="0" width="4" height="18" class="w4"/>
-        </g>
+        <rect x="12" y="45" width="240" height="4" fill="#001133" />
+        <rect x="12" y="45" width="100" height="4" fill="#00e5ff" class="bar-move" />
+      </g>
+
+      <!-- Bellek (RAM) -->
+      <g transform="translate(20, 140)">
+        <rect x="0" y="0" width="3" height="35" fill="#00ff66" />
+        <text x="12" y="12" font-size="10" fill="#a0b4d6">SİSTEM BELLEĞİ (RAM)</text>
+        <text x="12" y="30" font-size="16" font-weight="bold" fill="#ffffff">16.00 GB</text>
+        <text x="210" y="30" font-size="14" font-weight="bold" fill="#00ff66">53%</text>
+        
+        <rect x="12" y="45" width="240" height="8" fill="none" stroke="#0055ff" stroke-width="1" />
+        <rect x="15" y="48" width="125" height="2" fill="#00ff66" />
+      </g>
+
+      <!-- İşletim Sistemi -->
+      <g transform="translate(20, 240)">
+        <rect x="0" y="0" width="260" height="45" fill="#0055ff" opacity="0.1" />
+        <text x="12" y="18" font-size="10" fill="#a0b4d6">ÇEKİRDEK İŞLETİM SİSTEMİ</text>
+        <text x="12" y="36" font-size="16" font-weight="bold" fill="#ffffff">WINDOWS 10 PRO</text>
+        <circle cx="240" cy="22" r="4" fill="#00ff66" class="blink" />
       </g>
     </g>
 
-    <!-- Terminal Alt Bar -->
-    <g transform="translate(60, 610)">
-      <path d="M 0,0 L 20,20 L 1140,20 L 1160,0 Z" fill="#2979ff" opacity="0.1" stroke="#2979ff" stroke-width="1" />
-      <text x="30" y="14" font-size="12" fill="#00e5ff">C:\Users\OĞUZHAN&gt; tail -f system.log</text>
-      
-      <g font-size="12" fill="#a0b4d6">
-        <text x="300" y="14" class="log-1">&gt; YZ Ajanları ağ trafiğini filtreleniyor...</text>
-        <text x="300" y="14" class="log-2">&gt; Blok bulmaca motoru kaynakları optimize ediliyor...</text>
-        <text x="300" y="14" class="log-3">&gt; wp_oguz.46 üzerinden güvenli tünel açık. Bekleniyor...</text>
+    <!-- 4. SAĞ PANEL: YAZILIM VE AĞ (X: 930 - 1230) -->
+    <g class="panel" transform="translate(930, 150)">
+      <!-- Panel Çerçevesi -->
+      <path d="M 0,-20 L 280,-20 L 300,0 L 300,400 L 0,400 Z" fill="#0033aa" opacity="0.05" stroke="#00e5ff" stroke-width="1" />
+      <text x="20" y="15" font-size="14" font-weight="bold" fill="#00e5ff" letter-spacing="1">AKTİF_DÜĞÜMLER</text>
+      <line x1="20" y1="25" x2="280" y2="25" stroke="#0055ff" stroke-width="1" />
+
+      <!-- Modüller -->
+      <g transform="translate(20, 50)">
+        <!-- Modül 1 -->
+        <g transform="translate(0, 0)">
+          <rect x="0" y="0" width="260" height="35" fill="#001133" />
+          <rect x="0" y="0" width="3" height="35" fill="#00ff66" />
+          <text x="12" y="15" font-size="10" fill="#a0b4d6">M_01</text>
+          <text x="12" y="28" font-size="14" font-weight="bold" fill="#ffffff">PYTHON ENGINE</text>
+          <text x="210" y="22" font-size="12" fill="#00ff66">ONLINE</text>
+        </g>
+
+        <!-- Modül 2 -->
+        <g transform="translate(0, 45)">
+          <rect x="0" y="0" width="260" height="35" fill="#001133" />
+          <rect x="0" y="0" width="3" height="35" fill="#00e5ff" />
+          <text x="12" y="15" font-size="10" fill="#a0b4d6">M_02</text>
+          <text x="12" y="28" font-size="14" font-weight="bold" fill="#ffffff">YZ YÖNETİM KURULU</text>
+          <circle cx="230" cy="17" r="4" fill="#00e5ff" class="blink" />
+        </g>
+
+        <!-- Modül 3 (Error) -->
+        <g transform="translate(0, 90)">
+          <rect x="0" y="0" width="260" height="35" fill="#ff2a5f" opacity="0.1" />
+          <rect x="0" y="0" width="3" height="35" fill="#ff2a5f" />
+          <text x="12" y="15" font-size="10" fill="#ff2a5f">GIT: oguzhan-tpl</text>
+          <text x="12" y="28" font-size="14" font-weight="bold" fill="#ffffff">PUSH FAILED</text>
+          <text x="200" y="22" font-size="12" fill="#ff2a5f" font-weight="bold">ERR_403</text>
+        </g>
+      </g>
+
+      <!-- Küresel İletişim (wp_oguz.46) - ZIPLAYAN EFEKT SİLİNDİ -->
+      <g transform="translate(20, 260)">
+        <text x="0" y="0" font-size="10" fill="#a0b4d6">KÜRESEL İLETİŞİM PROTOKOLÜ</text>
+        <text x="0" y="25" font-size="24" font-weight="bold" fill="#ffffff" letter-spacing="2">wp_oguz.46</text>
+        
+        <!-- Statik Dijital Frekans / Barkod Tasarımı (Zıplamaz, şık durur) -->
+        <g transform="translate(180, 10)" fill="#00e5ff" opacity="0.6">
+          <rect x="0" y="0" width="2" height="15" />
+          <rect x="4" y="5" width="2" height="10" />
+          <rect x="8" y="2" width="2" height="13" />
+          <rect x="12" y="8" width="2" height="7" />
+          <rect x="16" y="0" width="2" height="15" />
+          <rect x="20" y="4" width="2" height="11" />
+          <rect x="24" y="1" width="2" height="14" />
+          <rect x="28" y="9" width="2" height="6" />
+        </g>
+
+        <text x="0" y="45" font-size="10" fill="#00ff66" class="blink">&gt; BAĞLANTI AKTİF</text>
       </g>
     </g>
+
+    <!-- 5. ÜST VE ALT BİLGİ ÇUBUKLARI -->
+    <g transform="translate(50, 60)">
+      <text x="0" y="0" font-size="20" font-weight="bold" fill="#ffffff" letter-spacing="2">OĞUZHAN_OS <tspan fill="#00e5ff">v5.0</tspan></text>
+      <path d="M 0,10 L 200,10 L 220,20 L 1180,20" fill="none" stroke="#0055ff" stroke-width="1" />
+    </g>
+
+    <g transform="translate(50, 640)">
+      <path d="M 0,0 L 20,20 L 1160,20 L 1180,0 Z" fill="#001133" stroke="#0044aa" stroke-width="1" />
+      <text x="30" y="14" font-size="12" fill="#00e5ff">C:\Users\OGUZHAN&gt; status_check</text>
+      <text x="250" y="14" font-size="12" fill="#a0b4d6">Sistem stabil. Biyometrik onaylandı. Bağlantı şifreli.</text>
+      <rect x="230" y="4" width="8" height="12" fill="#00ff66" class="blink" />
+    </g>
+
   </g>
 </svg>
