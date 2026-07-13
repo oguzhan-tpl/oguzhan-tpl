@@ -741,7 +741,7 @@
           </g>
           
           <text x="70" y="30" class="hud-title glow-cyan" font-size="12px" fill="#00f3ff">INSTAGRAM</text>
-          <text x="70" y="50" class="hud-value" font-size="13px" fill="#00b0ff">@oguzhan.topal</text>
+          <text x="70" y="50" class="hud-value" font-size="13px" fill="#00b0ff">@wp_oguz.46</text>
           <circle cx="250" cy="35" r="3.5" fill="#00ff66" class="status-blink glow-green" />
         </g>
       </g>
@@ -762,7 +762,7 @@
           </g>
 
           <text x="70" y="30" class="hud-title glow-cyan" font-size="12px" fill="#00f3ff">GITHUB</text>
-          <text x="70" y="50" class="hud-value" font-size="13px" fill="#00b0ff">github.com/oguzhantopal</text>
+          <text x="70" y="50" class="hud-value" font-size="13px" fill="#00b0ff">github.com/oguzhan-tpl</text>
           <circle cx="250" cy="35" r="3.5" fill="#00ff66" class="status-blink glow-green" />
         </g>
       </g>
@@ -781,7 +781,7 @@
           </g>
 
           <text x="70" y="30" class="hud-title glow-cyan" font-size="12px" fill="#00f3ff">WEB SITESİ</text>
-          <text x="70" y="50" class="hud-value" font-size="13px" fill="#00b0ff">oguzhantopal.dev</text>
+          <text x="70" y="50" class="hud-value" font-size="13px" fill="#00b0ff"></text>
           <circle cx="250" cy="35" r="3.5" fill="#00ff66" class="status-blink glow-green" />
         </g>
       </g>
