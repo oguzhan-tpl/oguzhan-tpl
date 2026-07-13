@@ -1,233 +1,892 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="100%" height="100%" font-family="'Courier New', monospace" style="background-color: #03060c;">
-  
-  <style>
-    /* 1. GİRİŞ YAZILARI ANİMASYONLARI (Tam Merkezde, Çakışmayan Akış) */
-    .seq-1 { animation: hideIntro 0.1s 2.8s forwards; }
-    .seq-2 { opacity: 0; animation: showHideIntro 2.8s 2.8s forwards; }
-    
-    @keyframes hideIntro {
-      to { opacity: 0; visibility: hidden; }
-    }
-    
-    @keyframes showHideIntro {
-      0%, 95% { opacity: 1; visibility: visible; }
-      100% { opacity: 0; visibility: hidden; }
-    }
-
-    /* Daktilo Maskesi Kaydırma Efekti */
-    .slide-1 { animation: slideMask 1.5s 0.5s steps(20) forwards; }
-    .slide-2 { animation: slideMask 1.5s 3.3s steps(20) forwards; }
-    
-    @keyframes slideMask {
-      to { transform: translateX(750px); }
-    }
-
-    /* 2. ANA SİSTEMİN AÇILMASI (5.6 saniyeden sonra) */
-    .main-system { opacity: 0; animation: systemOn 1s 5.6s forwards; }
-    @keyframes systemOn { 100% { opacity: 1; } }
-
-    /* Çekirdek Pop-up Animasyonu */
-    .core-pop { transform: scale(0); transform-origin: 640px 360px; animation: popUp 1s 5.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-    @keyframes popUp { 100% { transform: scale(1); } }
-
-    /* Lazer Veri Yollarının Çizilmesi */
-    .draw-line { stroke-dasharray: 500; stroke-dashoffset: 500; animation: draw 1s 6.2s forwards; }
-    @keyframes draw { 100% { stroke-dashoffset: 0; } }
-
-    /* Yan Panellerin Belirmesi */
-    .panel { opacity: 0; animation: fadeIn 1s 6.8s forwards; }
-    @keyframes fadeIn { 100% { opacity: 1; } }
-
-    /* 3. DÖNGÜSEL (SÜREKLİ) ANİMASYONLAR */
-    .spin-cw { animation: spin 20s linear infinite; transform-origin: 640px 360px; }
-    .spin-ccw { animation: spinRev 15s linear infinite; transform-origin: 640px 360px; }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
-    @keyframes spinRev { 100% { transform: rotate(-360deg); } }
-
-    .pulse { animation: beat 2s infinite alternate; transform-origin: 640px 360px; }
-    @keyframes beat { 0% { transform: scale(0.95); opacity: 0.8; } 100% { transform: scale(1.05); opacity: 0.3; } }
-
-    .blink { animation: flash 1s infinite; }
-    @keyframes flash { 50% { opacity: 0; } }
-
-    .bar-move { animation: loadBar 3s infinite alternate; }
-    @keyframes loadBar { 0% { width: 40px; } 100% { width: 220px; } }
-  </style>
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%" style="background-color: #02040a;">
   <defs>
-    <!-- Ferah ve temiz nokta ızgarası -->
-    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#00e5ff" stroke-width="0.5" opacity="0.05" />
+    <!-- Google Fonts import -->
+    <style type="text/css">
+      <![CDATA[
+      @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&display=swap');
+
+      /* Typography & Base Styles */
+      text {
+        user-select: none;
+      }
+      .hud-text {
+        font-family: 'Share Tech Mono', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+      }
+      .hud-title {
+        font-family: 'Orbitron', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, sans-serif;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+      }
+
+      /* Glow & Neon FX */
+      .glow-cyan {
+        filter: drop-shadow(0 0 5px rgba(0, 243, 255, 0.8)) drop-shadow(0 0 1px rgba(0, 102, 255, 0.5));
+      }
+      .glow-blue {
+        filter: drop-shadow(0 0 6px rgba(0, 102, 255, 0.7));
+      }
+      .glow-orange {
+        filter: drop-shadow(0 0 5px rgba(255, 149, 0, 0.8));
+      }
+      .glow-green {
+        filter: drop-shadow(0 0 5px rgba(0, 255, 102, 0.8));
+      }
+
+      /* Master 24-Second Timeline Keyframes */
+
+      /* Grid Pulsing Overlay */
+      @keyframes gridPulse {
+        0%, 37.5% { opacity: 0; }
+        41.67%, 95.83% { opacity: 0.12; }
+        100% { opacity: 0; }
+      }
+      .hud-grid {
+        animation: gridPulse 24s infinite ease-in-out;
+      }
+
+      /* Vertical Scanline Overlay */
+      @keyframes scanline {
+        0% { transform: translateY(-250px); }
+        100% { transform: translateY(800px); }
+      }
+      .hud-scanline {
+        pointer-events: none;
+        animation: scanline 7s infinite linear;
+      }
+
+      /* Stage 1: Typing "OĞUZHAN TOPAL" (0s - 3s) */
+      .typing-text {
+        font-family: 'Orbitron', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 46px;
+        font-weight: 900;
+        letter-spacing: 4px;
+        fill: #00f3ff;
+        opacity: 0;
+        animation-duration: 24s;
+        animation-iteration-count: infinite;
+      }
+      .text-oguzhan {
+        animation-name: typeOguzhan;
+        clip-path: inset(0 100% 0 0);
+      }
+      .text-developer {
+        animation-name: typeDeveloper;
+        clip-path: inset(0 100% 0 0);
+      }
+
+      @keyframes typeOguzhan {
+        0% { opacity: 0; clip-path: inset(0 100% 0 0); }
+        0.83% { opacity: 1; clip-path: inset(0 100% 0 0); } /* 0.2s */
+        5.42% { opacity: 1; clip-path: inset(0 0% 0 0); }   /* 1.3s */
+        7.5% { opacity: 1; clip-path: inset(0 0% 0 0); }    /* 1.8s */
+        11.25% { opacity: 1; clip-path: inset(0 100% 0 0); } /* 2.7s */
+        12.08%, 100% { opacity: 0; clip-path: inset(0 100% 0 0); } /* 2.9s */
+      }
+
+      @keyframes typeDeveloper {
+        0%, 12.08% { opacity: 0; clip-path: inset(0 100% 0 0); }
+        12.92% { opacity: 1; clip-path: inset(0 100% 0 0); } /* 3.1s */
+        17.92% { opacity: 1; clip-path: inset(0 0% 0 0); }   /* 4.3s */
+        20.0% { opacity: 1; clip-path: inset(0 0% 0 0); }    /* 4.8s */
+        23.75% { opacity: 1; clip-path: inset(0 100% 0 0); } /* 5.7s */
+        24.58%, 100% { opacity: 0; clip-path: inset(0 100% 0 0); } /* 5.9s */
+      }
+
+      /* Stage 2: Flashing diagnostic logs in Turkish (6s - 9s) */
+      .log-text {
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 26px;
+        fill: #00f3ff;
+        opacity: 0;
+        animation-duration: 24s;
+        animation-iteration-count: infinite;
+        animation-timing-function: step-end;
+      }
+      .log-1 { animation-name: showLog1; }
+      .log-2 { animation-name: showLog2; }
+      .log-3 { animation-name: showLog3; }
+      .log-4 { animation-name: showLog4; }
+      .log-5 { animation-name: showLog5; }
+
+      @keyframes showLog1 {
+        0%, 25% { opacity: 0; }
+        25.01%, 27.5% { opacity: 1; } /* 6.0s - 6.6s */
+        27.51%, 100% { opacity: 0; }
+      }
+      @keyframes showLog2 {
+        0%, 27.5% { opacity: 0; }
+        27.51%, 30.0% { opacity: 1; } /* 6.6s - 7.2s */
+        30.01%, 100% { opacity: 0; }
+      }
+      @keyframes showLog3 {
+        0%, 30.0% { opacity: 0; }
+        30.01%, 32.5% { opacity: 1; } /* 7.2s - 7.8s */
+        32.51%, 100% { opacity: 0; }
+      }
+      @keyframes showLog4 {
+        0%, 32.5% { opacity: 0; }
+        32.51%, 35.0% { opacity: 1; } /* 7.8s - 8.4s */
+        35.01%, 100% { opacity: 0; }
+      }
+      @keyframes showLog5 {
+        0%, 35.0% { opacity: 0; }
+        35.01%, 37.5% { opacity: 1; } /* 8.4s - 9.0s */
+        37.51%, 100% { opacity: 0; }
+      }
+
+      /* Log Jitter */
+      .log-group {
+        animation: logGlitch 0.25s infinite linear;
+      }
+      @keyframes logGlitch {
+        0%, 100% { transform: translate(0, 0); }
+        85% { transform: translate(0, 0); }
+        87% { transform: translate(-2px, 1px); }
+        89% { transform: translate(1px, -2px); }
+        91% { transform: translate(-1px, 2px); }
+        93% { transform: translate(2px, -1px); }
+      }
+
+      /* Stage 3: HUD Core Entrance & Rotation (9s - 23s) */
+      @keyframes scaleCore {
+        0%, 37.5% { transform: scale(0); opacity: 0; }
+        41.67% { transform: scale(1.15); opacity: 1; }
+        43.75%, 95.83% { transform: scale(1); opacity: 1; }
+        100% { transform: scale(0); opacity: 0; }
+      }
+      .hud-core {
+        transform-origin: 0px 0px;
+        animation: scaleCore 24s infinite cubic-bezier(0.19, 1, 0.22, 1);
+      }
+
+      /* Core Rotations */
+      .rot-cw {
+        transform-origin: 0px 0px;
+        animation: rotateCW 18s infinite linear;
+      }
+      .rot-ccw {
+        transform-origin: 0px 0px;
+        animation: rotateCCW 14s infinite linear;
+      }
+      @keyframes rotateCW {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      @keyframes rotateCCW {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(-360deg); }
+      }
+
+      /* Boot ring drawing path */
+      @keyframes drawBootRing {
+        0%, 37.5% { stroke-dashoffset: 1225; opacity: 0; }
+        37.51% { stroke-dashoffset: 1225; opacity: 1; }
+        45.83%, 95.83% { stroke-dashoffset: 0; opacity: 1; }
+        100% { stroke-dashoffset: 0; opacity: 0; }
+      }
+      .hud-boot-ring {
+        stroke-dasharray: 1225;
+        stroke-dashoffset: 1225;
+        animation: drawBootRing 24s infinite cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      /* Scrolling binary code */
+      @keyframes scrollDataUp {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-220px); }
+      }
+      @keyframes scrollDataDown {
+        0% { transform: translateY(-160px); }
+        100% { transform: translateY(0); }
+      }
+      .data-stream {
+        animation: scrollDataUp 10s infinite linear;
+      }
+      .data-stream-slow {
+        animation: scrollDataDown 14s infinite linear;
+      }
+
+      /* BOOT-UP SCANNING LASER SWEEP (9s - 10s) */
+      @keyframes bootLaser {
+        0%, 37.5% { transform: translateY(0); opacity: 0; }
+        37.51% { transform: translateY(0); opacity: 1; }
+        41.67% { transform: translateY(770px); opacity: 1; }
+        42.5% { transform: translateY(770px); opacity: 0; }
+        100% { transform: translateY(770px); opacity: 0; }
+      }
+      .hud-boot-laser {
+        animation: bootLaser 24s infinite linear;
+      }
+
+      /* FADE INTERFACE CONTAINERS IN-PLACE AT 9.0s */
+      @keyframes fadePanelContainer {
+        0%, 37.5% { opacity: 0; }
+        37.51%, 95.83% { opacity: 1; }
+        100% { opacity: 0; }
+      }
+      .hud-panel-left {
+        transform: translate(40px, 120px);
+        animation: fadePanelContainer 24s infinite step-end;
+      }
+      .hud-panel-right {
+        transform: translate(840px, 120px);
+        animation: fadePanelContainer 24s infinite step-end;
+      }
+      .hud-panel-top {
+        transform: translate(400px, 30px);
+        animation: fadePanelContainer 24s infinite step-end;
+      }
+      .hud-panel-bottom {
+        transform: translate(400px, 690px);
+        animation: fadePanelContainer 24s infinite step-end;
+      }
+
+      /* PANEL BORDERS DRAWING ANIMATION */
+      @keyframes drawBorderLeftRight {
+        0%, 37.5% { stroke-dashoffset: 1725; opacity: 0; }
+        37.51% { stroke-dashoffset: 1725; opacity: 1; }
+        43.75%, 95.83% { stroke-dashoffset: 0; opacity: 1; }
+        100% { stroke-dashoffset: 0; opacity: 0; }
+      }
+      .border-left-right-draw {
+        stroke-dasharray: 1725;
+        stroke-dashoffset: 1725;
+        animation: drawBorderLeftRight 24s infinite cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      @keyframes drawBorderTopBottom {
+        0%, 37.5% { stroke-dashoffset: 848; opacity: 0; }
+        37.51% { stroke-dashoffset: 848; opacity: 1; }
+        43.75%, 95.83% { stroke-dashoffset: 0; opacity: 1; }
+        100% { stroke-dashoffset: 0; opacity: 0; }
+      }
+      .border-top-bottom-draw {
+        stroke-dasharray: 848;
+        stroke-dashoffset: 848;
+        animation: drawBorderTopBottom 24s infinite cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      /* SLOW FADE FOR DARK GLASS PANEL BACKGROUNDS */
+      @keyframes fadePanelBg {
+        0%, 41.67% { fill-opacity: 0; }
+        45.83%, 95.83% { fill-opacity: 1; }
+        100% { fill-opacity: 0; }
+      }
+      .hud-panel-bg {
+        fill-opacity: 0;
+        animation: fadePanelBg 24s infinite ease-in-out;
+      }
+
+      /* SEQUENTIAL FLICKER IN FOR PANEL CONTENT */
+      @keyframes flickerIn {
+        0%, 43.75% { opacity: 0; transform: scale(0.98); }
+        43.76% { opacity: 0.25; }
+        44.17% { opacity: 0.15; }
+        44.58% { opacity: 0.85; transform: scale(1); }
+        45.0% { opacity: 0.35; }
+        45.42% { opacity: 0.9; }
+        45.83%, 95.83% { opacity: 1; transform: scale(1); }
+        100% { opacity: 0; }
+      }
+      .content-flicker {
+        animation: flickerIn 24s infinite cubic-bezier(0.19, 1, 0.22, 1);
+      }
+
+      /* STAGGERED SOCIAL CARDS ANIMATION */
+      @keyframes staggerCard1 {
+        0%, 43.75% { opacity: 0; transform: translateY(15px); }
+        46.25%, 95.83% { opacity: 1; transform: translateY(0); }
+        100% { opacity: 0; }
+      }
+      @keyframes staggerCard2 {
+        0%, 45.0% { opacity: 0; transform: translateY(15px); }
+        47.5%, 95.83% { opacity: 1; transform: translateY(0); }
+        100% { opacity: 0; }
+      }
+      @keyframes staggerCard3 {
+        0%, 46.25% { opacity: 0; transform: translateY(15px); }
+        48.75%, 95.83% { opacity: 1; transform: translateY(0); }
+        100% { opacity: 0; }
+      }
+      .social-card-1 { animation: staggerCard1 24s infinite cubic-bezier(0.19, 1, 0.22, 1); }
+      .social-card-2 { animation: staggerCard2 24s infinite cubic-bezier(0.19, 1, 0.22, 1); }
+      .social-card-3 { animation: staggerCard3 24s infinite cubic-bezier(0.19, 1, 0.22, 1); }
+
+      /* BOUNCE POP FOR CPU/RAM GAUGES */
+      @keyframes gaugePop1 {
+        0%, 45.0% { opacity: 0; transform: scale(0); }
+        48.5%, 95.83% { opacity: 1; transform: scale(1); }
+        100% { opacity: 0; }
+      }
+      @keyframes gaugePop2 {
+        0%, 46.25% { opacity: 0; transform: scale(0); }
+        49.75%, 95.83% { opacity: 1; transform: scale(1); }
+        100% { opacity: 0; }
+      }
+      .gauge-pop-1 {
+        transform-origin: 0px 0px;
+        animation: gaugePop1 24s infinite cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .gauge-pop-2 {
+        transform-origin: 0px 0px;
+        animation: gaugePop2 24s infinite cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      /* Indicators, Scanner & FX */
+      .status-blink {
+        animation: blinkGreen 1.6s infinite alternate ease-in-out;
+      }
+      @keyframes blinkGreen {
+        0% { fill: #0088ff; opacity: 0.4; }
+        100% { fill: #00ff66; opacity: 1; filter: drop-shadow(0 0 6px #00ff66); }
+      }
+
+      @keyframes scannerMove {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(80px); }
+      }
+      .panel-scanner {
+        animation: scannerMove 3.5s infinite ease-in-out;
+      }
+
+      /* CPU / RAM Circular Gauges filling */
+      @keyframes fillCPUMeter {
+        0%, 45.83% { stroke-dashoffset: 251; }
+        55% { stroke-dashoffset: 145; }
+        72% { stroke-dashoffset: 155; }
+        86% { stroke-dashoffset: 125; }
+        95.83% { stroke-dashoffset: 135; }
+        100% { stroke-dashoffset: 251; }
+      }
+      .cpu-meter-fill {
+        stroke-dasharray: 251;
+        stroke-dashoffset: 251;
+        animation: fillCPUMeter 24s infinite ease-in-out;
+      }
+
+      @keyframes fillRAMMeter {
+        0%, 45.83% { stroke-dashoffset: 251; }
+        55% { stroke-dashoffset: 95; }
+        72% { stroke-dashoffset: 85; }
+        86% { stroke-dashoffset: 92; }
+        95.83% { stroke-dashoffset: 88; }
+        100% { stroke-dashoffset: 251; }
+      }
+      .ram-meter-fill {
+        stroke-dasharray: 251;
+        stroke-dashoffset: 251;
+        animation: fillRAMMeter 24s infinite ease-in-out;
+      }
+
+      /* Subtly moving coordinate points */
+      @keyframes coordJitter {
+        0%, 100% { transform: translate(0, 0); }
+        50% { transform: translate(1px, -1px); }
+      }
+      .coord-txt {
+        animation: coordJitter 4s infinite ease-in-out;
+      }
+
+      /* Slide sweep scan indicator inside bottom panel */
+      @keyframes slideBar {
+        0%, 100% { transform: translateX(0); }
+        50% { transform: translateX(200px); }
+      }
+      .hud-slider-bar {
+        animation: slideBar 3.5s infinite ease-in-out;
+      }
+      ]]>
+    </style>
+
+    <!-- Detailed Hexagonal Grid Pattern -->
+    <pattern id="hex-pattern" width="56" height="97" patternUnits="userSpaceOnUse" patternTransform="scale(0.6)">
+      <path d="M 28 0 L 56 16 L 56 48 L 28 64 L 0 48 L 0 16 Z" fill="none" stroke="#00f3ff" stroke-width="0.7" opacity="0.05" />
+      <path d="M 28 48 L 56 64 L 56 96 L 28 112 L 0 96 L 0 64 Z" fill="none" stroke="#00f3ff" stroke-width="0.7" opacity="0.05" />
     </pattern>
+
+    <!-- Grid Pattern -->
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#00f3ff" stroke-width="0.5" opacity="0.08" />
+    </pattern>
+
+    <!-- Moving linear scanline gradient -->
+    <linearGradient id="scanline-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#00f3ff" stop-opacity="0" />
+      <stop offset="50%" stop-color="#00f3ff" stop-opacity="0.06" />
+      <stop offset="100%" stop-color="#00f3ff" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Glow Divider Gradient -->
+    <linearGradient id="glow-line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00f3ff" stop-opacity="0" />
+      <stop offset="25%" stop-color="#00f3ff" stop-opacity="0.95" />
+      <stop offset="75%" stop-color="#00f3ff" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#00f3ff" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Core Radial Aura -->
+    <radialGradient id="core-aura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00f3ff" stop-opacity="0.15" />
+      <stop offset="55%" stop-color="#0066ff" stop-opacity="0.04" />
+      <stop offset="100%" stop-color="#03060f" stop-opacity="0" />
+    </radialGradient>
   </defs>
 
-  <!-- ARKA PLAN -->
-  <rect width="100%" height="100%" fill="#03060c" />
-  <rect width="100%" height="100%" fill="url(#grid)" />
-
-  <!-- =====================================================================
-       AŞAMA 1: GİRİŞ SEKANSI (YAZILAR) 
-       Milimetrik olarak merkeze sabitlendi, CSS transform çakışması giderildi.
-       ===================================================================== -->
+  <!-- CANVAS BACKGROUND, CORE GLOW & GRAPHICS -->
+  <rect width="100%" height="100%" fill="#03050c" />
+  <circle cx="600" cy="400" r="500" fill="url(#core-aura)" />
+  <rect width="100%" height="100%" fill="url(#grid)" class="hud-grid" />
+  <rect width="100%" height="100%" fill="url(#hex-pattern)" class="hud-grid" />
   
-  <g class="seq-1" transform="translate(640, 360)">
-    <text x="0" y="15" font-size="45" font-weight="bold" fill="#00e5ff" text-anchor="middle" letter-spacing="8">OĞUZHAN TOPAL</text>
-    <!-- Yazıyı örten ve sağa çekilen maske kutusu (Daktilo Efekti) -->
-    <g class="slide-1">
-      <rect x="-350" y="-30" width="750" height="60" fill="#03060c" />
-      <rect x="-350" y="-20" width="15" height="40" fill="#00e5ff" class="blink" />
+  <!-- Sweeping holographic scanline -->
+  <rect width="1200" height="250" fill="url(#scanline-grad)" class="hud-scanline" />
+
+  <!-- DECORATIVE CANVAS BORDER & CORNER BRACKETS -->
+  <rect x="15" y="15" width="1170" height="770" fill="none" stroke="#0066ff" stroke-opacity="0.2" stroke-width="1" />
+  <g class="glow-cyan" stroke="#00f3ff" stroke-width="2.5" fill="none">
+    <path d="M 15 45 L 15 15 L 45 15" />
+    <path d="M 1185 45 L 1185 15 L 1155 15" />
+    <path d="M 15 755 L 15 785 L 45 785" />
+    <path d="M 1185 755 L 1185 785 L 1155 785" />
+  </g>
+
+  <!-- BACKGROUND DECORATIVE CONNECTING DIAGONAL HOLOGRAPHIC LINES -->
+  <g stroke="#00f3ff" stroke-width="0.8" stroke-dasharray="3 6" opacity="0.2" fill="none">
+    <line x1="360" y1="120" x2="430" y2="230" />
+    <line x1="840" y1="120" x2="770" y2="230" />
+    <line x1="360" y1="680" x2="430" y2="570" />
+    <line x1="840" y1="680" x2="770" y2="570" />
+  </g>
+
+  <!-- DECORATIVE BACKGROUND BINARY WATERFALLS -->
+  <g opacity="0.08" class="hud-text" font-size="9px" fill="#00f3ff">
+    <g transform="translate(80, 0)">
+      <g class="data-stream">
+        <text x="0" y="100">01101001</text>
+        <text x="0" y="120">01110011</text>
+        <text x="0" y="140">01110100</text>
+        <text x="0" y="160">01100001</text>
+        <text x="0" y="180">01101110</text>
+        <text x="0" y="200">01100010</text>
+        <text x="0" y="220">01110101</text>
+        <text x="0" y="240">01101100</text>
+        <text x="0" y="260">01100101</text>
+        <text x="0" y="280">01110110</text>
+        <text x="0" y="300">01101111</text>
+        <!-- loop duplicates -->
+        <text x="0" y="320">01101001</text>
+        <text x="0" y="340">01110011</text>
+        <text x="0" y="360">01110100</text>
+        <text x="0" y="380">01100001</text>
+        <text x="0" y="400">01101110</text>
+        <text x="0" y="420">01100010</text>
+        <text x="0" y="440">01110101</text>
+        <text x="0" y="460">01101100</text>
+        <text x="0" y="480">01100101</text>
+        <text x="0" y="500">01110110</text>
+        <text x="0" y="520">01101111</text>
+      </g>
+    </g>
+    <g transform="translate(1080, 0)">
+      <g class="data-stream-slow">
+        <text x="0" y="100">10010110</text>
+        <text x="0" y="120">11011001</text>
+        <text x="0" y="140">10110110</text>
+        <text x="0" y="160">11100101</text>
+        <text x="0" y="180">10011011</text>
+        <text x="0" y="200">11001011</text>
+        <text x="0" y="220">10111001</text>
+        <text x="0" y="240">11011011</text>
+        <!-- loop duplicates -->
+        <text x="0" y="260">10010110</text>
+        <text x="0" y="280">11011001</text>
+        <text x="0" y="300">10110110</text>
+        <text x="0" y="320">11100101</text>
+        <text x="0" y="340">10011011</text>
+        <text x="0" y="360">11001011</text>
+        <text x="0" y="380">10111001</text>
+        <text x="0" y="400">11011011</text>
+      </g>
     </g>
   </g>
 
-  <g class="seq-2" transform="translate(640, 360)">
-    <text x="0" y="15" font-size="45" font-weight="bold" fill="#00ff66" text-anchor="middle" letter-spacing="8">PYTHON_CORE // INITED</text>
-    <g class="slide-2">
-      <rect x="-400" y="-30" width="800" height="60" fill="#03060c" />
-      <rect x="-400" y="-20" width="15" height="40" fill="#00ff66" class="blink" />
+  <!-- STAGE 1 & 2: KEYBOARD TYPING INTRO (0s - 6s) -->
+  <g id="typing-scene">
+    <text class="typing-text text-oguzhan glow-cyan" x="360" y="415" text-anchor="start">OĞUZHAN TOPAL</text>
+    <text class="typing-text text-developer glow-cyan" x="360" y="415" text-anchor="start">DEVELOPER</text>
+  </g>
+
+  <!-- STAGE 3: FLASHING SYSTEM LOGS (6s - 9s) -->
+  <g id="log-scene" class="log-group">
+    <text class="log-text log-1 glow-cyan" x="600" y="410" text-anchor="middle">&gt;&gt; SİSTEM PROTOKOLLERİ BAŞLATILIYOR...</text>
+    <text class="log-text log-2 glow-cyan" x="600" y="410" text-anchor="middle">&gt;&gt; BAĞLANTI MODÜLLERİ AKTİF EDİLİYOR...</text>
+    <text class="log-text log-3 glow-cyan" x="600" y="410" text-anchor="middle">&gt;&gt; GÜVENLİK FİLTRESİ ÇALIŞTIRILIYOR (84%)...</text>
+    <text class="log-text log-4 glow-cyan" x="600" y="410" text-anchor="middle">&gt;&gt; VERİ TABANI BAĞLANTISI BAŞARILI...</text>
+    <text class="log-text log-5 glow-cyan" x="600" y="410" text-anchor="middle">&gt;&gt; ERİŞİM ONAYLANDI. ARAYÜZ OLUŞTURULUYOR.</text>
+  </g>
+
+  <!-- STAGE 4: JARVIS HUD GRAPHICS (9s - 23s Active) -->
+  
+  <!-- 1. CENTRAL ROTATING CORE -->
+  <g transform="translate(600, 400)">
+    <g class="hud-core">
+      <!-- STABLE STATIC CENTER CORE -->
+      <circle r="10" fill="#00f3ff" class="glow-cyan" />
+      <circle r="18" fill="none" stroke="#00f3ff" stroke-width="1.2" stroke-opacity="0.8" />
+      <circle r="26" fill="none" stroke="#00f3ff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.6" />
+      
+      <!-- Boot-up loading ring draws dynamically from 9s - 11s -->
+      <circle class="hud-boot-ring glow-cyan" r="195" fill="none" stroke="#00f3ff" stroke-width="2.2" stroke-dasharray="8 6" opacity="0.7" />
+
+      <!-- Clockwise Rotating Elements -->
+      <g class="rot-cw">
+        <circle r="75" fill="none" stroke="#00f3ff" stroke-width="1.5" stroke-dasharray="15 35 10 15" class="glow-cyan" />
+        <circle r="145" fill="none" stroke="#00f3ff" stroke-width="3" stroke-dasharray="250 40 90 40" class="glow-cyan" />
+        
+        <!-- Tech Satellites orbiting at radius 145 -->
+        <circle cx="102" cy="102" r="3.5" fill="#ff9500" class="glow-orange" />
+        <circle cx="-102" cy="-102" r="3.5" fill="#ff9500" class="glow-orange" />
+
+        <!-- Radial markers -->
+        <line x1="0" y1="-145" x2="0" y2="-155" stroke="#00f3ff" stroke-width="2" />
+        <line x1="0" y1="145" x2="0" y2="155" stroke="#00f3ff" stroke-width="2" />
+        <line x1="-145" y1="0" x2="-155" y2="0" stroke="#00f3ff" stroke-width="2" />
+        <line x1="145" y1="0" x2="155" y2="0" stroke="#00f3ff" stroke-width="2" />
+      </g>
+
+      <!-- Counter-Clockwise Rotating Elements -->
+      <g class="rot-ccw">
+        <circle r="105" fill="none" stroke="#0066ff" stroke-width="3.5" stroke-dasharray="140 30 70 30" class="glow-blue" />
+        <circle r="125" fill="none" stroke="#00f3ff" stroke-width="1" stroke-dasharray="4 8" opacity="0.6" />
+        
+        <!-- Outer Tech Ring (Segmented) -->
+        <circle r="170" fill="none" stroke="#ff9500" stroke-width="1.5" stroke-dasharray="20 180 50 120" opacity="0.8" class="glow-orange" />
+        
+        <!-- Tech Satellites orbiting at radius 170 -->
+        <circle cx="-170" cy="0" r="3" fill="#00f3ff" class="glow-cyan" />
+        <circle cx="170" cy="0" r="3" fill="#00f3ff" class="glow-cyan" />
+
+        <!-- Centered rotating Hexagon outline -->
+        <polygon points="0,-95 82,-47 82,47 0,95 -82,47 -82,-47" fill="none" stroke="#00f3ff" stroke-width="1.5" opacity="0.4" class="glow-cyan" />
+      </g>
+
+      <!-- Static Crosshairs & Target Box overlays -->
+      <g opacity="0.8" class="glow-cyan">
+        <line x1="-200" y1="0" x2="-180" y2="0" stroke="#00f3ff" stroke-width="1.5" />
+        <line x1="180" y1="0" x2="200" y2="0" stroke="#00f3ff" stroke-width="1.5" />
+        <line x1="0" y1="-200" x2="-180" y2="0" stroke="#00f3ff" stroke-width="1.5" opacity="0" /> <!-- spacer -->
+        <line x1="0" y1="-200" x2="0" y2="-180" stroke="#00f3ff" stroke-width="1.5" />
+        <line x1="0" y1="180" x2="0" y2="200" stroke="#00f3ff" stroke-width="1.5" />
+
+        <path d="M -8 0 L 8 0 M 0 -8 L 0 8" stroke="#00f3ff" stroke-width="1" />
+
+        <!-- Cyber Corner Brackets on Target Area -->
+        <path d="M -180 -90 L -200 -90 L -200 -110" fill="none" stroke="#00f3ff" stroke-width="2" />
+        <path d="M 180 -90 L 200 -90 L 200 -110" fill="none" stroke="#00f3ff" stroke-width="2" />
+        <path d="M -180 90 L -200 90 L -200 110" fill="none" stroke="#00f3ff" stroke-width="2" />
+        <path d="M 180 90 L 200 90 L 200 110" fill="none" stroke="#00f3ff" stroke-width="2" />
+        
+        <circle cx="-200" cy="-90" r="2" fill="#00f3ff" />
+        <circle cx="200" cy="-90" r="2" fill="#00f3ff" />
+      </g>
+
+      <!-- Radar Sweep slice -->
+      <g class="rot-cw" opacity="0.25">
+        <path d="M 0 0 L 134 62 A 148 148 0 0 1 -62 134 Z" fill="url(#scanline-grad)" />
+      </g>
     </g>
   </g>
 
-  <!-- =====================================================================
-       AŞAMA 2: ANA ARAYÜZ (5.6 SANİYEDEN SONRA BELİRİR)
-       ===================================================================== -->
-  
-  <g class="main-system">
+  <!-- 2. LEFT PANEL: SYSTEM PROFILE (User Info & Wireframe Radar Scope) -->
+  <g class="hud-panel-left">
+    <!-- Panel Background (slow fade in) -->
+    <path class="hud-panel-bg" d="M 0 30 L 30 0 L 320 0 L 320 530 L 290 560 L 0 560 Z" fill="rgba(3, 6, 15, 0.95)" stroke="none" />
+    
+    <!-- Panel Border Outer Frame (self-drawing stroke) -->
+    <path class="border-left-right-draw glow-blue" d="M 0 30 L 30 0 L 320 0 L 320 530 L 290 560 L 0 560 Z" fill="none" stroke="#0066ff" stroke-width="1.5" />
+    
+    <!-- Panel Border Inner Accent (flickers in with content) -->
+    <path class="hud-panel-inner-accent content-flicker" d="M 8 33 L 33 8 L 312 8 L 312 527 L 287 552 L 8 552 Z" fill="none" stroke="#00f3ff" stroke-width="1" opacity="0.25" />
+    
+    <!-- Accent side clips -->
+    <rect x="-3" y="60" width="6" height="50" fill="#00f3ff" class="glow-cyan" />
+    <rect x="317" y="450" width="6" height="50" fill="#00f3ff" class="glow-cyan" />
 
-    <!-- 1. MERKEZİ ÇEKİRDEK (X: 640, Y: 360) -->
-    <g class="core-pop">
-      <!-- Arka Plan Parlaması -->
-      <circle cx="640" cy="360" r="140" fill="#00e5ff" opacity="0.05" />
-      
-      <!-- Sabit Dış Çerçeve -->
-      <circle cx="640" cy="360" r="120" fill="none" stroke="#0044aa" stroke-width="2" />
-      <path d="M 640,230 L 640,240 M 640,480 L 640,490 M 510,360 L 520,360 M 760,360 L 770,360" stroke="#00e5ff" stroke-width="2" />
+    <!-- Staggered Inner content -->
+    <g class="content-flicker">
+      <!-- Title header -->
+      <text x="25" y="32" class="hud-title glow-cyan" font-size="13px" fill="#00f3ff">SİSTEM PROFİLİ // DETAYLAR</text>
+      <line x1="25" y1="42" x2="295" y2="42" stroke="url(#glow-line)" stroke-width="1.5" />
 
-      <!-- Dönen Halkalar -->
-      <circle cx="640" cy="360" r="105" fill="none" stroke="#00e5ff" stroke-width="2" stroke-dasharray="60 20 10 20" class="spin-cw" />
-      <circle cx="640" cy="360" r="90" fill="none" stroke="#00ff66" stroke-width="1" stroke-dasharray="10 40" class="spin-ccw" />
-      
-      <!-- Titreşen Merkez (Kalp) -->
-      <polygon points="640,310 683,335 683,385 640,410 597,385 597,335" fill="none" stroke="#00e5ff" stroke-width="4" opacity="0.2" class="pulse" />
-      <polygon points="640,320 674,340 674,380 640,400 606,380 606,340" fill="#00e5ff" opacity="0.1" />
-      <polygon points="640,335 661,347 661,373 640,385 619,373 619,347" fill="none" stroke="#ffffff" stroke-width="1" />
-      <circle cx="640" cy="360" r="4" fill="#ffffff" />
-      
-      <text x="640" y="440" font-size="10" fill="#00e5ff" text-anchor="middle" letter-spacing="2">SYS_ONLINE</text>
-    </g>
-
-    <!-- 2. BAĞLANTI YOLLARI (Çekirdekten panellere giden köprüler) -->
-    <g fill="none" stroke="#0055ff" stroke-width="2">
-      <path d="M 520,360 L 350,360" class="draw-line" />
-      <path d="M 760,360 L 930,360" class="draw-line" />
-    </g>
-
-    <!-- 3. SOL PANEL: DONANIM (X: 50 - 350) -->
-    <g class="panel" transform="translate(50, 150)">
-      <!-- Panel Çerçevesi -->
-      <path d="M 0,0 L 20,-20 L 300,-20 L 300,400 L 0,400 Z" fill="#0033aa" opacity="0.05" stroke="#00e5ff" stroke-width="1" />
-      <text x="20" y="15" font-size="14" font-weight="bold" fill="#00e5ff" letter-spacing="1">DONANIM_MİMARİSİ</text>
-      <line x1="20" y1="25" x2="280" y2="25" stroke="#0055ff" stroke-width="1" />
-
-      <!-- İşlemci (CPU) -->
-      <g transform="translate(20, 50)">
-        <rect x="0" y="0" width="3" height="35" fill="#00e5ff" />
-        <text x="12" y="12" font-size="10" fill="#a0b4d6">İŞLEMCİ (CPU)</text>
-        <text x="12" y="30" font-size="16" font-weight="bold" fill="#ffffff">AMD Athlon 3000G</text>
+      <!-- Circular Radar Target Scope -->
+      <g transform="translate(25, 60)">
+        <rect x="0" y="0" width="90" height="90" fill="none" stroke="#00f3ff" stroke-width="1" opacity="0.3" />
+        <polygon points="5 5, 85 5, 85 85, 5 85" fill="rgba(0, 102, 255, 0.04)" />
         
-        <rect x="12" y="45" width="240" height="4" fill="#001133" />
-        <rect x="12" y="45" width="100" height="4" fill="#00e5ff" class="bar-move" />
-      </g>
+        <!-- Tech corners -->
+        <path d="M 0 10 L 0 0 L 10 0 M 80 0 L 90 0 L 90 10 M 90 80 L 90 90 L 80 90 M 10 90 L 0 90 L 0 80" fill="none" stroke="#00f3ff" stroke-width="1.5" />
 
-      <!-- Bellek (RAM) -->
-      <g transform="translate(20, 140)">
-        <rect x="0" y="0" width="3" height="35" fill="#00ff66" />
-        <text x="12" y="12" font-size="10" fill="#a0b4d6">SİSTEM BELLEĞİ (RAM)</text>
-        <text x="12" y="30" font-size="16" font-weight="bold" fill="#ffffff">16.00 GB</text>
-        <text x="210" y="30" font-size="14" font-weight="bold" fill="#00ff66">53%</text>
+        <!-- Radar concentric scopes -->
+        <circle cx="45" cy="45" r="32" fill="none" stroke="#00f3ff" stroke-width="1.2" opacity="0.4" stroke-dasharray="4 4" />
+        <circle cx="45" cy="45" r="20" fill="none" stroke="#0066ff" stroke-width="1" opacity="0.6" />
+        <circle cx="45" cy="45" r="8" fill="none" stroke="#00f3ff" stroke-width="1.5" opacity="0.8" />
         
-        <rect x="12" y="45" width="240" height="8" fill="none" stroke="#0055ff" stroke-width="1" />
-        <rect x="15" y="48" width="125" height="2" fill="#00ff66" />
+        <!-- Crosshairs inside scope -->
+        <line x1="45" y1="10" x2="45" y2="80" stroke="#00f3ff" stroke-width="1" stroke-opacity="0.5" />
+        <line x1="10" y1="45" x2="80" y2="45" stroke="#00f3ff" stroke-width="1" stroke-opacity="0.5" />
+        
+        <!-- Sonar sweep line (slow rotate) -->
+        <g transform="translate(45,45)" class="rot-cw">
+          <line x1="0" y1="0" x2="30" y2="-10" stroke="#ff9500" stroke-width="1.8" class="glow-orange" />
+        </g>
       </g>
 
-      <!-- İşletim Sistemi -->
-      <g transform="translate(20, 240)">
-        <rect x="0" y="0" width="260" height="45" fill="#0055ff" opacity="0.1" />
-        <text x="12" y="18" font-size="10" fill="#a0b4d6">ÇEKİRDEK İŞLETİM SİSTEMİ</text>
-        <text x="12" y="36" font-size="16" font-weight="bold" fill="#ffffff">WINDOWS 10 PRO</text>
-        <circle cx="240" cy="22" r="4" fill="#00ff66" class="blink" />
+      <!-- Micro Diagnostic texts beside Radar -->
+      <g transform="translate(130, 60)" class="hud-text" font-size="11px" fill="#00b0ff">
+        <text x="0" y="18">BAĞLANTI: GÜVENLİ</text>
+        <text x="0" y="36">NET UPLINK: AKTİF</text>
+        <text x="0" y="54">SECURE SSL: ON</text>
+        <text x="0" y="72" fill="#ff9500" class="status-blink">SİSTEM STABİL // OK</text>
+      </g>
+
+      <!-- Profile Text Information Fields -->
+      <g transform="translate(25, 185)">
+        <text x="0" y="20" class="hud-title" font-size="11px" fill="#0066ff">KULLANICI:</text>
+        <text x="110" y="20" class="hud-value glow-cyan" font-size="14px" fill="#00f3ff">OĞUZHAN TOPAL</text>
+        
+        <text x="0" y="55" class="hud-title" font-size="11px" fill="#0066ff">UNVAN:</text>
+        <text x="110" y="55" class="hud-value" font-size="14px" fill="#00f3ff">FULL-STACK DEVELOPER</text>
+
+        <text x="0" y="90" class="hud-title" font-size="11px" fill="#0066ff">UZMANLIK:</text>
+        <text x="110" y="90" class="hud-value" font-size="13px" fill="#00f3ff">UI-UX DESIGN / SECURE SYS</text>
+
+        <text x="0" y="125" class="hud-title" font-size="11px" fill="#0066ff">DURUM:</text>
+        <text x="110" y="125" class="hud-value status-blink" font-size="14px" fill="#00ff66">ONLINE // AKTİF</text>
+
+        <text x="0" y="160" class="hud-title" font-size="11px" fill="#0066ff">LOKASYON:</text>
+        <text x="110" y="160" class="hud-value" font-size="14px" fill="#00f3ff">İSTANBUL / TÜRKİYE</text>
+        
+        <line x1="0" y1="185" x2="270" y2="185" stroke="#00f3ff" stroke-opacity="0.2" stroke-width="1"/>
+      </g>
+
+      <!-- Real-time performance diagnostics line graph inside left panel -->
+      <g transform="translate(25, 395)" fill="none" stroke-width="1">
+        <rect x="0" y="0" width="270" height="50" fill="rgba(0, 102, 255, 0.03)" stroke="#00f3ff" stroke-opacity="0.15" />
+        <path d="M 5 45 L 35 15 L 65 35 L 95 10 L 125 25 L 155 5 L 185 30 L 215 12 L 245 28 L 265 8" stroke="#00f3ff" stroke-opacity="0.8" class="glow-cyan" />
+        <circle cx="265" cy="8" r="2.5" fill="#ff9500" class="glow-orange" />
+        <text x="8" y="12" class="hud-text" font-size="9px" fill="#00b0ff" opacity="0.6">UPLINK SPEED GRAPH (Gbps)</text>
       </g>
     </g>
 
-    <!-- 4. SAĞ PANEL: YAZILIM VE AĞ (X: 930 - 1230) -->
-    <g class="panel" transform="translate(930, 150)">
-      <!-- Panel Çerçevesi -->
-      <path d="M 0,-20 L 280,-20 L 300,0 L 300,400 L 0,400 Z" fill="#0033aa" opacity="0.05" stroke="#00e5ff" stroke-width="1" />
-      <text x="20" y="15" font-size="14" font-weight="bold" fill="#00e5ff" letter-spacing="1">AKTİF_DÜĞÜMLER</text>
-      <line x1="20" y1="25" x2="280" y2="25" stroke="#0055ff" stroke-width="1" />
-
-      <!-- Modüller -->
-      <g transform="translate(20, 50)">
-        <!-- Modül 1 -->
+    <!-- Circular gauges (CPU & RAM) -->
+    <g transform="translate(25, 460)">
+      <!-- CPU Circular gauge -->
+      <g class="gauge-pop-1">
         <g transform="translate(0, 0)">
-          <rect x="0" y="0" width="260" height="35" fill="#001133" />
-          <rect x="0" y="0" width="3" height="35" fill="#00ff66" />
-          <text x="12" y="15" font-size="10" fill="#a0b4d6">M_01</text>
-          <text x="12" y="28" font-size="14" font-weight="bold" fill="#ffffff">PYTHON ENGINE</text>
-          <text x="210" y="22" font-size="12" fill="#00ff66">ONLINE</text>
-        </g>
-
-        <!-- Modül 2 -->
-        <g transform="translate(0, 45)">
-          <rect x="0" y="0" width="260" height="35" fill="#001133" />
-          <rect x="0" y="0" width="3" height="35" fill="#00e5ff" />
-          <text x="12" y="15" font-size="10" fill="#a0b4d6">M_02</text>
-          <text x="12" y="28" font-size="14" font-weight="bold" fill="#ffffff">YZ YÖNETİM KURULU</text>
-          <circle cx="230" cy="17" r="4" fill="#00e5ff" class="blink" />
-        </g>
-
-        <!-- Modül 3 (Error) -->
-        <g transform="translate(0, 90)">
-          <rect x="0" y="0" width="260" height="35" fill="#ff2a5f" opacity="0.1" />
-          <rect x="0" y="0" width="3" height="35" fill="#ff2a5f" />
-          <text x="12" y="15" font-size="10" fill="#ff2a5f">GIT: oguzhan-tpl</text>
-          <text x="12" y="28" font-size="14" font-weight="bold" fill="#ffffff">PUSH FAILED</text>
-          <text x="200" y="22" font-size="12" fill="#ff2a5f" font-weight="bold">ERR_403</text>
+          <circle cx="45" cy="45" r="35" fill="none" stroke="#0066ff" stroke-width="2.5" opacity="0.2" />
+          <circle class="cpu-meter-fill glow-cyan" cx="45" cy="45" r="35" fill="none" stroke="#00f3ff" stroke-width="4.5" stroke-linecap="round" transform="rotate(-90 45 45)" />
+          <text x="45" y="42" class="hud-text" font-size="10px" fill="#00b0ff" text-anchor="middle">CPU</text>
+          <text x="45" y="56" class="hud-value glow-cyan" font-size="13px" fill="#00f3ff" text-anchor="middle">58%</text>
         </g>
       </g>
 
-      <!-- Küresel İletişim (wp_oguz.46) - ZIPLAYAN EFEKT SİLİNDİ -->
-      <g transform="translate(20, 260)">
-        <text x="0" y="0" font-size="10" fill="#a0b4d6">KÜRESEL İLETİŞİM PROTOKOLÜ</text>
-        <text x="0" y="25" font-size="24" font-weight="bold" fill="#ffffff" letter-spacing="2">wp_oguz.46</text>
-        
-        <!-- Statik Dijital Frekans / Barkod Tasarımı (Zıplamaz, şık durur) -->
-        <g transform="translate(180, 10)" fill="#00e5ff" opacity="0.6">
-          <rect x="0" y="0" width="2" height="15" />
-          <rect x="4" y="5" width="2" height="10" />
-          <rect x="8" y="2" width="2" height="13" />
-          <rect x="12" y="8" width="2" height="7" />
-          <rect x="16" y="0" width="2" height="15" />
-          <rect x="20" y="4" width="2" height="11" />
-          <rect x="24" y="1" width="2" height="14" />
-          <rect x="28" y="9" width="2" height="6" />
+      <!-- RAM Circular gauge -->
+      <g class="gauge-pop-2">
+        <g transform="translate(180, 0)">
+          <circle cx="45" cy="45" r="35" fill="none" stroke="#0066ff" stroke-width="2.5" opacity="0.2" />
+          <circle class="ram-meter-fill glow-cyan" cx="45" cy="45" r="35" fill="none" stroke="#00f3ff" stroke-width="4.5" stroke-linecap="round" transform="rotate(-90 45 45)" />
+          <text x="45" y="42" class="hud-text" font-size="10px" fill="#00b0ff" text-anchor="middle">RAM</text>
+          <text x="45" y="56" class="hud-value glow-cyan" font-size="13px" fill="#00f3ff" text-anchor="middle">72%</text>
         </g>
-
-        <text x="0" y="45" font-size="10" fill="#00ff66" class="blink">&gt; BAĞLANTI AKTİF</text>
       </g>
     </g>
-
-    <!-- 5. ÜST VE ALT BİLGİ ÇUBUKLARI -->
-    <g transform="translate(50, 60)">
-      <text x="0" y="0" font-size="20" font-weight="bold" fill="#ffffff" letter-spacing="2">OĞUZHAN_OS <tspan fill="#00e5ff">v5.0</tspan></text>
-      <path d="M 0,10 L 200,10 L 220,20 L 1180,20" fill="none" stroke="#0055ff" stroke-width="1" />
-    </g>
-
-    <g transform="translate(50, 640)">
-      <path d="M 0,0 L 20,20 L 1160,20 L 1180,0 Z" fill="#001133" stroke="#0044aa" stroke-width="1" />
-      <text x="30" y="14" font-size="12" fill="#00e5ff">C:\Users\OGUZHAN&gt; status_check</text>
-      <text x="250" y="14" font-size="12" fill="#a0b4d6">Sistem stabil. Biyometrik onaylandı. Bağlantı şifreli.</text>
-      <rect x="230" y="4" width="8" height="12" fill="#00ff66" class="blink" />
-    </g>
-
   </g>
+
+  <!-- 3. RIGHT PANEL: SOCIAL & CONTACT CONNECTIONS -->
+  <g class="hud-panel-right">
+    <!-- Panel Background (slow fade in) -->
+    <path class="hud-panel-bg" d="M 0 0 L 290 0 L 320 30 L 320 560 L 30 560 L 0 530 Z" fill="rgba(3, 6, 15, 0.95)" stroke="none" />
+    
+    <!-- Panel Border Outer Frame (self-drawing stroke) -->
+    <path class="border-left-right-draw glow-blue" d="M 0 0 L 290 0 L 320 30 L 320 560 L 30 560 L 0 530 Z" fill="none" stroke="#0066ff" stroke-width="1.5" />
+    
+    <!-- Panel Border Inner Accent (flickers in with content) -->
+    <path class="hud-panel-inner-accent content-flicker" d="M 8 8 L 287 8 L 312 33 L 312 552 L 33 552 L 8 527 Z" fill="none" stroke="#00f3ff" stroke-width="1" opacity="0.25" />
+
+    <!-- Accent side clips -->
+    <rect x="317" y="60" width="6" height="50" fill="#00f3ff" class="glow-cyan" />
+    <rect x="-3" y="450" width="6" height="50" fill="#00f3ff" class="glow-cyan" />
+
+    <!-- Staggered Inner content -->
+    <g class="content-flicker">
+      <!-- Panel Title header -->
+      <text x="25" y="32" class="hud-title glow-cyan" font-size="13px" fill="#00f3ff">İLETİŞİM / SOSYAL BAĞ</text>
+      <line x1="25" y1="42" x2="295" y2="42" stroke="url(#glow-line)" stroke-width="1.5" />
+    </g>
+
+    <!-- Social Link Cards -->
+    <g transform="translate(25, 60)">
+      
+      <!-- Instagram Card -->
+      <g class="social-card-1">
+        <g transform="translate(0, 0)">
+          <rect x="0" y="0" width="270" height="70" fill="rgba(0, 243, 255, 0.03)" stroke="#00f3ff" stroke-opacity="0.3" stroke-width="1" rx="4" />
+          <path d="M 0 10 L 0 0 L 10 0 M 260 0 L 270 0 L 270 10 M 270 60 L 270 70 L 260 70 M 10 70 L 0 70 L 0 60" fill="none" stroke="#00f3ff" stroke-width="1.5" class="glow-cyan" />
+
+          <!-- Instagram Vector Logo -->
+          <g transform="translate(18, 17)" class="glow-cyan">
+            <rect x="0" y="0" width="36" height="36" rx="9" fill="none" stroke="#00f3ff" stroke-width="2" />
+            <circle cx="18" cy="18" r="8" fill="none" stroke="#00f3ff" stroke-width="2" />
+            <circle cx="27" cy="9" r="2.5" fill="#00f3ff" />
+          </g>
+          
+          <text x="70" y="30" class="hud-title glow-cyan" font-size="12px" fill="#00f3ff">INSTAGRAM</text>
+          <text x="70" y="50" class="hud-value" font-size="13px" fill="#00b0ff">@oguzhan.topal</text>
+          <circle cx="250" cy="35" r="3.5" fill="#00ff66" class="status-blink glow-green" />
+        </g>
+      </g>
+
+      <!-- GitHub Card -->
+      <g class="social-card-2">
+        <g transform="translate(0, 85)">
+          <rect x="0" y="0" width="270" height="70" fill="rgba(0, 243, 255, 0.03)" stroke="#00f3ff" stroke-opacity="0.3" stroke-width="1" rx="4" />
+          <path d="M 0 10 L 0 0 L 10 0 M 260 0 L 270 0 L 270 10 M 270 60 L 270 70 L 260 70 M 10 70 L 0 70 L 0 60" fill="none" stroke="#00f3ff" stroke-width="1.5" class="glow-cyan" />
+
+          <!-- Git Branch Node Vector Logo -->
+          <g transform="translate(18, 17)" class="glow-cyan" fill="none" stroke="#00f3ff" stroke-width="2">
+            <line x1="18" y1="5" x2="18" y2="31" />
+            <path d="M 18 18 Q 28 18 28 8" />
+            <circle cx="18" cy="5" r="3.5" fill="#03050c" stroke="#00f3ff" stroke-width="2" />
+            <circle cx="18" cy="31" r="3.5" fill="#03050c" stroke="#00f3ff" stroke-width="2" />
+            <circle cx="28" cy="8" r="3.5" fill="#00f3ff" />
+          </g>
+
+          <text x="70" y="30" class="hud-title glow-cyan" font-size="12px" fill="#00f3ff">GITHUB</text>
+          <text x="70" y="50" class="hud-value" font-size="13px" fill="#00b0ff">github.com/oguzhantopal</text>
+          <circle cx="250" cy="35" r="3.5" fill="#00ff66" class="status-blink glow-green" />
+        </g>
+      </g>
+
+      <!-- Webpage Card -->
+      <g class="social-card-3">
+        <g transform="translate(0, 170)">
+          <rect x="0" y="0" width="270" height="70" fill="rgba(0, 243, 255, 0.03)" stroke="#00f3ff" stroke-opacity="0.3" stroke-width="1" rx="4" />
+          <path d="M 0 10 L 0 0 L 10 0 M 260 0 L 270 0 L 270 10 M 270 60 L 270 70 L 260 70 M 10 70 L 0 70 L 0 60" fill="none" stroke="#00f3ff" stroke-width="1.5" class="glow-cyan" />
+
+          <!-- Network Globe Vector Logo -->
+          <g transform="translate(18, 17)" class="glow-cyan" fill="none" stroke="#00f3ff" stroke-width="1.5">
+            <circle cx="18" cy="18" r="16" stroke-width="2" />
+            <ellipse cx="18" cy="18" rx="6.5" ry="16" />
+            <line x1="2" y1="18" x2="34" y2="18" />
+          </g>
+
+          <text x="70" y="30" class="hud-title glow-cyan" font-size="12px" fill="#00f3ff">WEB SITESİ</text>
+          <text x="70" y="50" class="hud-value" font-size="13px" fill="#00b0ff">oguzhantopal.dev</text>
+          <circle cx="250" cy="35" r="3.5" fill="#00ff66" class="status-blink glow-green" />
+        </g>
+      </g>
+    </g>
+
+    <!-- Diagnostics Terminal Console (Isolated animation to prevent overlap) -->
+    <g class="content-flicker">
+      <g transform="translate(25, 335)">
+        <rect x="0" y="0" width="270" height="200" fill="rgba(0, 102, 255, 0.02)" stroke="#0066ff" stroke-opacity="0.25" stroke-width="1" />
+        
+        <!-- Tech corners -->
+        <path d="M 0 10 L 0 0 L 10 0 M 260 0 L 270 0 L 270 10 M 270 190 L 270 200 L 260 200 M 10 200 L 0 200 L 0 190" fill="none" stroke="#0066ff" stroke-width="1.5" opacity="0.5" />
+
+        <!-- Diagnostics log feed -->
+        <g class="hud-text" font-size="10px" fill="#00f3ff" opacity="0.7">
+          <!-- Title bar -->
+          <rect x="2" y="2" width="266" height="16" fill="rgba(0, 243, 255, 0.06)" />
+          <text x="10" y="13" font-weight="bold" fill="#00f3ff">SİSTEM ANALİZİ PROTOKOLÜ</text>
+
+          <!-- Lines -->
+          <text x="12" y="38">SYS_INIT .......................... <tspan fill="#00ff66" font-weight="bold">[OK]</tspan></text>
+          <text x="12" y="60">CORE_DB_CONN ...................... <tspan fill="#00ff66" font-weight="bold">[OK]</tspan></text>
+          <text x="12" y="82">SECURE_SSL_UPLINK ................. <tspan fill="#00ff66" font-weight="bold">[OK]</tspan></text>
+          <text x="12" y="104">FIREWALL_BYPASS ................... <tspan fill="#00ff66" font-weight="bold">[OK]</tspan></text>
+          <text x="12" y="126">DECRYPTOR_ACTIVE .................. <tspan fill="#00ff66" font-weight="bold">[OK]</tspan></text>
+          <text x="12" y="148">PORT_STATUS_443 ................... <tspan fill="#00ff66" font-weight="bold">[OK]</tspan></text>
+          <text x="12" y="170" fill="#ff9500" class="status-blink">STABIL GÜVENLİ BAĞLANTI KODU: 309_OK</text>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- 4. TOP TITLE BAR & MAIN TELEMETRY -->
+  <g class="hud-panel-top">
+    <!-- Panel Background (slow fade in) -->
+    <polygon class="hud-panel-bg" points="0,0 400,0 375,42 25,42" fill="rgba(3, 6, 15, 0.95)" stroke="none" />
+    
+    <!-- Panel Border Outer Frame (self-drawing stroke) -->
+    <polygon class="border-top-bottom-draw glow-cyan" points="0,0 400,0 375,42 25,42" fill="none" stroke="#00f3ff" stroke-width="1.5" />
+    
+    <!-- Staggered Inner content -->
+    <g class="content-flicker">
+      <!-- Title string -->
+      <text x="200" y="27" class="hud-title glow-cyan" font-size="16px" fill="#00f3ff" text-anchor="middle">OĞUZHAN TOPAL // SYSTEM</text>
+
+      <!-- Side tech indicators -->
+      <rect x="-12" y="5" width="4" height="28" fill="#ff9500" class="glow-orange" />
+      <rect x="408" y="5" width="4" height="28" fill="#ff9500" class="glow-orange" />
+      
+      <line x1="-8" y1="19" x2="-2" y2="19" stroke="#00f3ff" stroke-width="1" />
+      <line x1="402" y1="19" x2="408" y2="19" stroke="#00f3ff" stroke-width="1" />
+      
+      <!-- Small sub telemetry text directly under top block -->
+      <text x="200" y="55" class="hud-text" font-size="9px" fill="#00b0ff" text-anchor="middle" opacity="0.8">SYS_STATUS: NOMINAL // CORE_TEMP: 34.2C // UPLINK: VERIFIED</text>
+    </g>
+  </g>
+
+  <!-- 5. BOTTOM BAR: SYSTEM PROGRESS MONITOR & CALIBRATION -->
+  <g class="hud-panel-bottom">
+    <!-- Panel Background (slow fade in) -->
+    <polygon class="hud-panel-bg" points="25,0 375,0 400,42 0,42" fill="rgba(3, 6, 15, 0.95)" stroke="none" />
+    
+    <!-- Panel Border Outer Frame (self-drawing stroke) -->
+    <polygon class="border-top-bottom-draw glow-cyan" points="25,0 375,0 400,42 0,42" fill="none" stroke="#00f3ff" stroke-width="1.5" />
+    
+    <!-- Staggered Inner content -->
+    <g class="content-flicker">
+      <!-- Label -->
+      <text x="200" y="25" class="hud-title glow-cyan" font-size="10px" fill="#00f3ff" text-anchor="middle" letter-spacing="3">SİSTEM KALİBRASYON TELEMETRİSİ</text>
+      
+      <!-- Fine-detail scale ticks -->
+      <path d="M 50,45 L 350,45" stroke="#00f3ff" stroke-opacity="0.3" stroke-width="1" />
+      <path d="M 50,40 L 50,45 M 80,42 L 80,45 M 110,42 L 110,45 M 140,42 L 140,45 M 170,42 L 170,45 M 200,40 L 200,45 M 230,42 L 230,45 M 260,42 L 260,45 M 290,42 L 290,45 M 320,42 L 320,45 M 350,40 L 350,45" stroke="#00f3ff" stroke-width="1" opacity="0.5" />
+
+      <!-- Static Tech readouts replacing dynamic bouncing shapes -->
+      <g class="hud-text" font-size="8.5px" fill="#00b0ff" opacity="0.8">
+        <text x="52" y="37">&gt; SYS_FREQ: 5.4 GHZ</text>
+        <text x="160" y="37">&gt; TEMP: 37.4C</text>
+        <text x="268" y="37" fill="#ff9500" class="status-blink">&gt; CON_LATENCY: 12ms</text>
+      </g>
+
+      <!-- Sleek horizontal progress sweep bar (Smooth sliding, no jumping) -->
+      <g transform="translate(75, 48)">
+        <rect x="0" y="0" width="250" height="3" fill="rgba(0, 102, 255, 0.1)" stroke="#00f3ff" stroke-opacity="0.25" stroke-width="0.8" />
+        <rect class="hud-slider-bar glow-cyan" x="0" y="0" width="50" height="3" fill="#00f3ff" />
+      </g>
+    </g>
+  </g>
+
+  <!-- 6. HUD SYSTEM COORDINATE CORNER TELEMETRY -->
+  <g class="hud-core coord-txt" opacity="0.35" font-size="10px">
+    <g transform="translate(-200, -280)">
+      <text class="hud-text" fill="#00f3ff">&gt; SYS_LNK: NODE_90A</text>
+    </g>
+    <g transform="translate(130, -280)">
+      <text class="hud-text" fill="#00f3ff">&gt; REF: HUD_V1.9</text>
+    </g>
+    <g transform="translate(-200, 290)">
+      <text class="hud-text" fill="#00f3ff">&gt; SIG_LATENCY: 12MS</text>
+    </g>
+    <g transform="translate(130, 290)">
+      <text class="hud-text" fill="#00f3ff">&gt; RADAR_SWP: PASS</text>
+    </g>
+  </g>
+
+  <!-- 7. HOLOGRAPHIC SCANNING LASER SWEEP TRIGGER (sweeps y=15 to y=785 between 9.0s and 10.0s) -->
+  <line class="hud-boot-laser glow-cyan" x1="15" y1="15" x2="1185" y2="15" stroke="#00f3ff" stroke-width="2.5" opacity="0" />
 </svg>
